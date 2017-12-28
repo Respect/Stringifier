@@ -22,7 +22,10 @@
     "autoload": {
         "psr-4": {
             "Respect\\Stringifier\\": "src/"
-        }
+        },
+        "files": [
+            "src/stringify.php"
+        ]
     },
     "scripts": {
         "docheader": "vendor/bin/docheader check src/ tests/",
