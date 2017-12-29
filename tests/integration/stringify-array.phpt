@@ -24,4 +24,4 @@ echo stringify([
 ]);
 ?>
 --EXPECT--
-{ 1, NULL, { 1.0, { [resource] (stream), ..., { } } }, FALSE, [object] (stdClass: { }),  ...  }
+`{ 1, NULL, { 1.0, { [resource] (stream), ..., { } } }, FALSE, [object] (stdClass: { }),  ...  }`

@@ -39,7 +39,7 @@ final class ArrayStringifierTest extends TestCase
             ->expects($this->never())
             ->method('quote');
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, 3, 5 );
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5 );
 
         self::assertNull($arrayStringifier->stringify($raw, $depth));
     }
@@ -65,7 +65,7 @@ final class ArrayStringifierTest extends TestCase
             ->expects($this->never())
             ->method('quote');
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $maximumDepth, 5);
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, $maximumDepth, 5);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
@@ -91,7 +91,7 @@ final class ArrayStringifierTest extends TestCase
             ->expects($this->never())
             ->method('quote');
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $maximumDepth, 5);
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, $maximumDepth, 5);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
@@ -111,7 +111,14 @@ final class ArrayStringifierTest extends TestCase
             ->expects($this->never())
             ->method('stringify');
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, 3, 5);
+        $quoterMock = $this->createMock(Quoter::class);
+        $quoterMock
+            ->expects($this->once())
+            ->method('quote')
+            ->with($expected, $depth)
+            ->willReturn($expected);
+
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
@@ -131,7 +138,14 @@ final class ArrayStringifierTest extends TestCase
             ->expects($this->never())
             ->method('stringify');
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $depth, 5);
+        $quoterMock = $this->createMock(Quoter::class);
+        $quoterMock
+            ->expects($this->once())
+            ->method('quote')
+            ->with($expected, $depth)
+            ->willReturn($expected);
+
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, $depth, 5);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
@@ -154,7 +168,14 @@ final class ArrayStringifierTest extends TestCase
                 return (string) $raw;
             });
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, 3, 5);
+        $quoterMock = $this->createMock(Quoter::class);
+        $quoterMock
+            ->expects($this->once())
+            ->method('quote')
+            ->with($expected, $depth)
+            ->willReturn($expected);
+
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
@@ -181,7 +202,14 @@ final class ArrayStringifierTest extends TestCase
                 return (string) $raw;
             });
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, 3, 5);
+        $quoterMock = $this->createMock(Quoter::class);
+        $quoterMock
+            ->expects($this->once())
+            ->method('quote')
+            ->with($expected, $depth)
+            ->willReturn($expected);
+
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
@@ -204,7 +232,14 @@ final class ArrayStringifierTest extends TestCase
                 return (string) $raw;
             });
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, 3, 5);
+        $quoterMock = $this->createMock(Quoter::class);
+        $quoterMock
+            ->expects($this->once())
+            ->method('quote')
+            ->with($expected, $depth)
+            ->willReturn($expected);
+
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
@@ -227,7 +262,14 @@ final class ArrayStringifierTest extends TestCase
                 return (string) $raw;
             });
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, 3, 5);
+        $quoterMock = $this->createMock(Quoter::class);
+        $quoterMock
+            ->expects($this->once())
+            ->method('quote')
+            ->with($expected, $depth)
+            ->willReturn($expected);
+
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
@@ -252,7 +294,14 @@ final class ArrayStringifierTest extends TestCase
                 return (string) $raw;
             });
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, 1, $itemsLimit);
+        $quoterMock = $this->createMock(Quoter::class);
+        $quoterMock
+            ->expects($this->once())
+            ->method('quote')
+            ->with($expected, $depth)
+            ->willReturn($expected);
+
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 1, $itemsLimit);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }

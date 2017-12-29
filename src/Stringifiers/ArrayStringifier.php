@@ -18,6 +18,7 @@ use function implode;
 use function is_array;
 use function is_int;
 use function sprintf;
+use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 
 /**
@@ -33,6 +34,11 @@ final class ArrayStringifier implements Stringifier
     private $stringifier;
 
     /**
+     * @var Quoter
+     */
+    private $quoter;
+
+    /**
      * @var int
      */
     private $maximumDepth;
@@ -46,12 +52,14 @@ final class ArrayStringifier implements Stringifier
      * Initializes the stringifier.
      *
      * @param Stringifier $stringifier
+     * @param Quoter $quoter
      * @param int $maximumDepth
      * @param int $itemsLimit
      */
-    public function __construct(Stringifier $stringifier, int $maximumDepth, int $itemsLimit)
+    public function __construct(Stringifier $stringifier, Quoter $quoter, int $maximumDepth, int $itemsLimit)
     {
         $this->stringifier = $stringifier;
+        $this->quoter = $quoter;
         $this->maximumDepth = $maximumDepth;
         $this->itemsLimit = $itemsLimit;
     }
@@ -66,7 +74,7 @@ final class ArrayStringifier implements Stringifier
         }
 
         if (empty($raw)) {
-            return '{ }';
+            return $this->quoter->quote('{ }', $depth);
         }
 
         if ($depth >= $this->maximumDepth) {
@@ -89,7 +97,7 @@ final class ArrayStringifier implements Stringifier
             $items[$itemsCount] .= $this->stringifier->stringify($value, $depth + 1);
         }
 
-        return sprintf('{ %s }', implode(', ', $items));
+        return $this->quoter->quote(sprintf('{ %s }', implode(', ', $items)), $depth);
     }
 
     private function isSequential(array $raw): bool
