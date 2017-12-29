@@ -284,7 +284,7 @@ final class ArrayStringifierTest extends TestCase
         $raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         $depth = 0;
 
-        $expected = '{ 1, 2, 3, 4, 5,  ...  }';
+        $expected = '{ 1, 2, 3, 4, 5, ... }';
 
         $stringifierMock = $this->createMock(Stringifier::class);
         $stringifierMock

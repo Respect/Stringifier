@@ -86,7 +86,7 @@ final class ArrayStringifier implements Stringifier
         $isSequential = $this->isSequential($raw);
         foreach ($raw as $key => $value) {
             if (++$itemsCount > $this->itemsLimit) {
-                $items[$itemsCount] = ' ... ';
+                $items[$itemsCount] = '...';
                 break;
             }
 
@@ -100,8 +100,15 @@ final class ArrayStringifier implements Stringifier
         return $this->quoter->quote(sprintf('{ %s }', implode(', ', $items)), $depth);
     }
 
-    private function isSequential(array $raw): bool
+    /**
+     * Returns whether the array is sequential or not.
+     *
+     * @param array $array
+     *
+     * @return bool
+     */
+    private function isSequential(array $array): bool
     {
-        return array_keys($raw) === range(0, count($raw) - 1);
+        return array_keys($array) === range(0, count($array) - 1);
     }
 }
