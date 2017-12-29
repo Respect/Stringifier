@@ -65,12 +65,12 @@ final class ArrayStringifier implements Stringifier
             return null;
         }
 
-        if ($depth >= $this->maximumDepth) {
-            return '...';
-        }
-
         if (empty($raw)) {
             return '{ }';
+        }
+
+        if ($depth >= $this->maximumDepth) {
+            return '...';
         }
 
         $items = [];

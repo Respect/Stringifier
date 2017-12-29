@@ -49,7 +49,7 @@ final class ArrayStringifierTest extends TestCase
      */
     public function shouldReturnAPlaceHolderWhenDepthIsEqualsToMaximumDepth(): void
     {
-        $raw = [];
+        $raw = [1, 2, 3];
         $depth = 42;
         $maximumDepth = 42;
 
@@ -75,7 +75,7 @@ final class ArrayStringifierTest extends TestCase
      */
     public function shouldReturnAPlaceHolderWhenDepthIsBiggerThanMaximumDepth(): void
     {
-        $raw = [];
+        $raw = [1, 2, 3];
         $depth = 42;
         $maximumDepth = 41;
 
@@ -112,6 +112,26 @@ final class ArrayStringifierTest extends TestCase
             ->method('stringify');
 
         $arrayStringifier = new ArrayStringifier($stringifierMock, 3, 5);
+
+        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnAPlaceHolderWhenRawValueIsAnEmptyArrayEvenThenReachedTheMaximumDepth(): void
+    {
+        $raw = [];
+        $depth = 0;
+
+        $expected = '{ }';
+
+        $stringifierMock = $this->createMock(Stringifier::class);
+        $stringifierMock
+            ->expects($this->never())
+            ->method('stringify');
+
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $depth, 5);
 
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
