@@ -53,7 +53,7 @@ final class ClusterStringifier implements Stringifier
         $stringifier = new self();
         $stringifier->setStringifiers([
             new TraversableStringifier($stringifier, $quoter),
-            new DateTimeStringifier($stringifier, 'c'),
+            new DateTimeStringifier($stringifier, $quoter, 'c'),
             new ThrowableStringifier($stringifier, $quoter),
             new StringableObjectStringifier($stringifier),
             new JsonSerializableStringifier($stringifier, $quoter),

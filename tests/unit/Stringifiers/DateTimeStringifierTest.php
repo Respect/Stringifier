@@ -17,6 +17,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
+use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\DateTimeStringifier;
 
@@ -37,7 +38,12 @@ final class DateTimeStringifierTest extends TestCase
             ->expects($this->never())
             ->method('stringify');
 
-        $dateTimeStringifier = new DateTimeStringifier($stringifierMock, 'c');
+        $quoterMock = $this->createMock(Quoter::class);
+        $quoterMock
+            ->expects($this->never())
+            ->method('quote');
+
+        $dateTimeStringifier = new DateTimeStringifier($stringifierMock, $quoterMock, 'c');
 
         self::assertNull($dateTimeStringifier->stringify('NotDateTimeInterface', 0));
     }
@@ -49,25 +55,34 @@ final class DateTimeStringifierTest extends TestCase
      *
      * @param DateTimeInterface $raw
      * @param string $format
-     * @param string $expectedValue
+     * @param string $expected
      */
     public function shouldConvertDateTimeInterfaceToString(
         DateTimeInterface $raw,
         string $format,
-        string $expectedValue
+        string $expected
     ): void {
         $depth = 0;
+
+        $formattedDateTime = $raw->format($format);
 
         $stringifierMock = $this->createMock(Stringifier::class);
         $stringifierMock
             ->expects($this->once())
             ->method('stringify')
-            ->with($expectedValue, $depth)
-            ->willReturn($expectedValue);
+            ->with($formattedDateTime, $depth + 1)
+            ->willReturn($formattedDateTime);
 
-        $dateTimeStringifier = new DateTimeStringifier($stringifierMock, $format);
+        $quoterMock = $this->createMock(Quoter::class);
+        $quoterMock
+            ->expects($this->once())
+            ->method('quote')
+            ->with($expected)
+            ->willReturn($expected);
 
-        self::assertSame($expectedValue, $dateTimeStringifier->stringify($raw, $depth));
+        $dateTimeStringifier = new DateTimeStringifier($stringifierMock, $quoterMock, $format);
+
+        self::assertSame($expected, $dateTimeStringifier->stringify($raw, $depth));
     }
 
     public function validValuesProvider(): array
@@ -76,9 +91,9 @@ final class DateTimeStringifierTest extends TestCase
         $dateTimeImmutable = DateTimeImmutable::createFromMutable($dateTime);
 
         return [
-            [$dateTime, 'd/m/Y', '31/12/2017'],
-            [$dateTime, 'c', '2017-12-31T23:59:59+00:00'],
-            [$dateTimeImmutable, 'Y-m-d H:i:s', '2017-12-31 23:59:59'],
+            [$dateTime, 'd/m/Y', '[date-time] (DateTime: 31/12/2017)'],
+            [$dateTime, 'c', '[date-time] (DateTime: 2017-12-31T23:59:59+00:00)'],
+            [$dateTimeImmutable, 'Y-m-d H:i:s', '[date-time] (DateTimeImmutable: 2017-12-31 23:59:59)'],
         ];
     }
 }

@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Respect\Stringifier\Stringifiers;
 
 use DateTimeInterface;
+use function get_class;
+use function sprintf;
+use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 
 /**
@@ -29,6 +32,11 @@ final class DateTimeStringifier implements Stringifier
     private $stringifier;
 
     /**
+     * @var Quoter
+     */
+    private $quoter;
+
+    /**
      * @var string
      */
     private $format;
@@ -37,11 +45,13 @@ final class DateTimeStringifier implements Stringifier
      * Initializes the stringifier.
      *
      * @param Stringifier $stringifier
+     * @param Quoter $quoter
      * @param string $format
      */
-    public function __construct(Stringifier $stringifier, string $format)
+    public function __construct(Stringifier $stringifier, Quoter $quoter, string $format)
     {
         $this->stringifier = $stringifier;
+        $this->quoter = $quoter;
         $this->format = $format;
     }
 
@@ -54,6 +64,13 @@ final class DateTimeStringifier implements Stringifier
             return null;
         }
 
-        return $this->stringifier->stringify($raw->format($this->format), $depth);
+        return $this->quoter->quote(
+            sprintf(
+                '[date-time] (%s: %s)',
+                get_class($raw),
+                $this->stringifier->stringify($raw->format($this->format), $depth + 1)
+            ),
+            $depth
+        );
     }
 }
