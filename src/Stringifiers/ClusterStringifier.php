@@ -65,7 +65,6 @@ final class ClusterStringifier implements Stringifier
             new BoolStringifier($quoter),
             new NullStringifier($quoter),
             new JsonParsableStringifier(),
-            new PhpParsableStringifier(),
         ]);
 
         return $stringifier;
