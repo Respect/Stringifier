@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
-use function get_class;
-use function iterator_to_array;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Traversable;
+use function get_class;
+use function iterator_to_array;
 
 /**
  * Converts an instance of Traversable into a string.

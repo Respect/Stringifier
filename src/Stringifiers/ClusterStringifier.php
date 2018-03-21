@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Respect\Stringifier\Stringifiers;
 
 use Respect\Stringifier\Quoters\CodeQuoter;
-use Respect\Stringifier\Quoters\StringQuoter;
 use Respect\Stringifier\Stringifier;
 
 /**
@@ -74,8 +73,6 @@ final class ClusterStringifier implements Stringifier
      * Set stringifiers.
      *
      * @param array $stringifiers
-     *
-     * @return void
      */
     public function setStringifiers(array $stringifiers): void
     {
@@ -90,8 +87,6 @@ final class ClusterStringifier implements Stringifier
      * Add a stringifier to the chain
      *
      * @param Stringifier $stringifier
-     *
-     * @return void
      */
     public function addStringifier(Stringifier $stringifier): void
     {

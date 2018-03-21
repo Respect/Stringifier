@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Test\Stringifiers;
 
-use Respect\Stringifier\Stringifiers\JsonParsableStringifier;
 use PHPUnit\Framework\TestCase;
+use Respect\Stringifier\Stringifiers\JsonParsableStringifier;
 use function tmpfile;
 
 /**
  * @covers \Respect\Stringifier\Stringifiers\JsonParsableStringifier
+ *
  * @author Henrique Moody <henriquemoody@gmail.com>
  */
 final class JsonParsableStringifierTest extends TestCase

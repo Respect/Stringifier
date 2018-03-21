@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Test\Stringifiers;
 
-use function is_array;
+use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\ArrayStringifier;
-use PHPUnit\Framework\TestCase;
+use function is_array;
 
 final class ArrayStringifierTest extends TestCase
 {
@@ -39,7 +39,7 @@ final class ArrayStringifierTest extends TestCase
             ->expects($this->never())
             ->method('quote');
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5 );
+        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
 
         self::assertNull($arrayStringifier->stringify($raw, $depth));
     }

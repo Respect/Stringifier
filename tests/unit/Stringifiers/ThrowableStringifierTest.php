@@ -16,15 +16,15 @@ namespace Respect\Stringifier\Test\Stringifiers;
 use Error;
 use ErrorException;
 use Exception;
-use function get_class;
-use function sprintf;
+use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\ThrowableStringifier;
-use PHPUnit\Framework\TestCase;
 use stdClass;
 use Throwable;
 use TypeError;
+use function get_class;
+use function sprintf;
 
 /**
  * @covers \Respect\Stringifier\Stringifiers\ThrowableStringifier

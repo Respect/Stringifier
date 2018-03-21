@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Respect\Stringifier\Stringifiers;
 
 use DateTimeInterface;
-use function get_class;
-use function sprintf;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
+use function get_class;
+use function sprintf;
 
 /**
  * Converts an instance of DateTimeInterface into a string.

@@ -18,7 +18,7 @@ return PhpCsFixer\Config::create()
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
-            ->in(['library', 'tests'])
+            ->in(['src', 'tests'])
             ->name('*.php')
             ->name('*.phpt')
     );

@@ -4,7 +4,7 @@ require 'vendor/autoload.php';
 
 use function Respect\Stringifier\stringify;
 
-echo stringify(NULL);
+echo stringify(null);
 ?>
 --EXPECT--
 `NULL`

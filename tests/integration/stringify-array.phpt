@@ -12,15 +12,15 @@ echo stringify([
         [
             tmpfile(),
             [
-                1
+                1,
             ],
             [
-            ]
-        ]
+            ],
+        ],
     ],
     false,
     new stdClass(),
-    42
+    42,
 ]);
 ?>
 --EXPECT--

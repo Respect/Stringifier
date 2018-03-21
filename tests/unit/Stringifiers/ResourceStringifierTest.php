@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Test\Stringifiers;
 
-use function tmpfile;
+use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\ResourceStringifier;
-use PHPUnit\Framework\TestCase;
+use function tmpfile;
 
 /**
  * @covers \Respect\Stringifier\Stringifiers\ResourceStringifier

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use Respect\Stringifier\Stringifier;
 use function is_object;
 use function method_exists;
-use Respect\Stringifier\Stringifier;
 
 /**
  * Converts a object that implements the __toString() magic method into a string.

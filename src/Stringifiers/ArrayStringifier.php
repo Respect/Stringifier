@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use Respect\Stringifier\Quoter;
+use Respect\Stringifier\Stringifier;
 use function array_keys;
 use function implode;
 use function is_array;
-use function is_int;
 use function sprintf;
-use Respect\Stringifier\Quoter;
-use Respect\Stringifier\Stringifier;
 
 /**
  * Converts an array value into a string.

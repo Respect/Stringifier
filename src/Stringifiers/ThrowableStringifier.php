@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use Respect\Stringifier\Quoter;
+use Respect\Stringifier\Stringifier;
+use Throwable;
 use function get_class;
 use function getcwd;
 use function sprintf;
 use function str_replace;
-use Respect\Stringifier\Quoter;
-use Respect\Stringifier\Stringifier;
-use Throwable;
 
 /**
  * Converts an instance of Throwable into a string.

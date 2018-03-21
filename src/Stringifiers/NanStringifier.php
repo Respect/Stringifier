@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
-use function is_float;
-use function is_nan;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
+use function is_float;
+use function is_nan;
 
 /**
  * Converts a NaN value into a string.

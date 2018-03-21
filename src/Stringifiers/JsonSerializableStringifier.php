@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use JsonSerializable;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
-use JsonSerializable;
 
 /**
  * Converts an instance of JsonSerializable into a string.

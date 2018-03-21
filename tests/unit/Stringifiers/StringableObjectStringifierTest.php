@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Test\Stringifiers;
 
+use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\StringableObjectStringifier;
-use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**

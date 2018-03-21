@@ -15,9 +15,9 @@ namespace Respect\Stringifier\Test\Stringifiers;
 
 namespace Respect\Stringifier\Test\Stringifiers;
 
+use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\ClusterStringifier;
-use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**

@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use Respect\Stringifier\Quoter;
+use Respect\Stringifier\Stringifier;
 use function get_class;
 use function get_object_vars;
 use function is_object;
 use function sprintf;
-use Respect\Stringifier\Quoter;
-use Respect\Stringifier\Stringifier;
 
 /**
  * Converts an object into a string.

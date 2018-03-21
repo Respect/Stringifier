@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
-use const JSON_UNESCAPED_UNICODE;
-use const JSON_UNESCAPED_SLASHES;
-use function json_encode;
 use Respect\Stringifier\Stringifier;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+use function json_encode;
 
 /**
  * Converts any value into JSON parsable string representation.

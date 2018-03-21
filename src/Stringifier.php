@@ -18,10 +18,10 @@ interface Stringifier
     /**
      * Converts the value into string if possible.
      *
-     * @param mixed $raw The raw value to be converted.
-     * @param int $depth The current depth of the conversion.
+     * @param mixed $raw the raw value to be converted
+     * @param int $depth the current depth of the conversion
      *
-     * @return null|string Returns NULL when the conversion is not possible.
+     * @return null|string returns NULL when the conversion is not possible
      */
     public function stringify($raw, int $depth): ?string;
 }

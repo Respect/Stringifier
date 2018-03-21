@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Test\Stringifiers;
 
+use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\NullStringifier;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Respect\Stringifier\Stringifiers\NullStringifier

@@ -10,7 +10,7 @@ echo implode(
         stringify(1.0),
         stringify(.3),
         stringify(INF),
-        stringify(-1*INF),
+        stringify(-1 * INF),
         stringify(acos(8)),
     ]
 );
