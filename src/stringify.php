@@ -15,11 +15,14 @@ namespace Respect\Stringifier;
 
 use Respect\Stringifier\Stringifiers\ClusterStringifier;
 
+/**
+ * @param mixed $value
+ */
 function stringify($value): string
 {
     static $stringifier;
 
-    if (null === $stringifier) {
+    if ($stringifier === null) {
         $stringifier = ClusterStringifier::createDefault();
     }
 

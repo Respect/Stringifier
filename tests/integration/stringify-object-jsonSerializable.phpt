@@ -1,18 +1,14 @@
 --FILE--
 <?php
+
+declare(strict_types=1);
+
 require 'vendor/autoload.php';
 
+use Respect\Stringifier\Test\MyJsonSerializable;
 use function Respect\Stringifier\stringify;
 
-final class MyObject implements JsonSerializable
-{
-    public function jsonSerialize(): array
-    {
-        return [1, 2, 3];
-    }
-}
-
-echo stringify(new MyObject());
+echo stringify(new MyJsonSerializable());
 ?>
 --EXPECT--
-`[json-serializable] (MyObject: { 1, 2, 3 })`
+`[json-serializable] (Respect\Stringifier\Test\MyJsonSerializable: { 1, 2, 3 })`

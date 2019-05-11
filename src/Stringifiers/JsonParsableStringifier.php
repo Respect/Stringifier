@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Respect\Stringifier\Stringifiers;
 
 use Respect\Stringifier\Stringifier;
+use function json_encode;
+use const JSON_PRESERVE_ZERO_FRACTION;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
-use function json_encode;
 
 /**
  * Converts any value into JSON parsable string representation.
@@ -31,7 +32,7 @@ final class JsonParsableStringifier implements Stringifier
     public function stringify($raw, int $depth): ?string
     {
         $string = json_encode($raw, (JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION));
-        if (false === $string) {
+        if ($string === false) {
             return null;
         }
 

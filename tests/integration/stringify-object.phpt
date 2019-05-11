@@ -1,17 +1,14 @@
 --FILE--
 <?php
+
+declare(strict_types=1);
+
 require 'vendor/autoload.php';
 
+use Respect\Stringifier\Test\MyObject;
 use function Respect\Stringifier\stringify;
-
-final class MyObject
-{
-    public $foo = true;
-    private $bar = .3;
-    private $baz = [1, 2, 3];
-}
 
 echo stringify(new MyObject());
 ?>
 --EXPECT--
-`[object] (MyObject: { "foo": TRUE })`
+`[object] (Respect\Stringifier\Test\MyObject: { "foo": TRUE })`

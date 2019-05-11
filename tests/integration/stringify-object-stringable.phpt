@@ -1,18 +1,14 @@
 --FILE--
 <?php
+
+declare(strict_types=1);
+
 require 'vendor/autoload.php';
 
+use Respect\Stringifier\Test\MyStringable;
 use function Respect\Stringifier\stringify;
 
-final class MyObject
-{
-    public function __toString(): string
-    {
-        return __METHOD__;
-    }
-}
-
-echo stringify(new MyObject());
+echo stringify(new MyStringable());
 ?>
 --EXPECT--
-"MyObject::__toString"
+"Respect\\Stringifier\\Test\\MyStringable"

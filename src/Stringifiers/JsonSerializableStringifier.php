@@ -16,6 +16,8 @@ namespace Respect\Stringifier\Stringifiers;
 use JsonSerializable;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
+use function get_class;
+use function sprintf;
 
 /**
  * Converts an instance of JsonSerializable into a string.
@@ -34,12 +36,6 @@ final class JsonSerializableStringifier implements Stringifier
      */
     private $quoter;
 
-    /**
-     * Initializes the stringifier.
-     *
-     * @param Stringifier $stringifier
-     * @param Quoter $quoter
-     */
     public function __construct(Stringifier $stringifier, Quoter $quoter)
     {
         $this->stringifier = $stringifier;

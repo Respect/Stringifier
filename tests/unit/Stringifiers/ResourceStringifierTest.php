@@ -28,7 +28,7 @@ final class ResourceStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldNotConvertToStringWhenRawValueIsNotAResource(): void
+    public function shouldNotConvertToStringWhenRawValueIsNotResource(): void
     {
         $raw = true;
         $depth = 0;
@@ -46,7 +46,7 @@ final class ResourceStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldConvertToStringWhenRawValueIsNotAResource(): void
+    public function shouldConvertToStringWhenRawValueIsNotResource(): void
     {
         $raw = tmpfile();
         $depth = 0;

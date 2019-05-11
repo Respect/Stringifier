@@ -47,7 +47,7 @@ final class ArrayStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnAPlaceHolderWhenDepthIsEqualsToMaximumDepth(): void
+    public function shouldReturnPlaceHolderWhenDepthIsEqualsToMaximumDepth(): void
     {
         $raw = [1, 2, 3];
         $depth = 42;
@@ -73,7 +73,7 @@ final class ArrayStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnAPlaceHolderWhenDepthIsBiggerThanMaximumDepth(): void
+    public function shouldReturnPlaceHolderWhenDepthIsBiggerThanMaximumDepth(): void
     {
         $raw = [1, 2, 3];
         $depth = 42;
@@ -99,7 +99,7 @@ final class ArrayStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnAPlaceHolderWhenRawValueIsAnEmptyArray(): void
+    public function shouldReturnPlaceHolderWhenRawValueIsAnEmptyArray(): void
     {
         $raw = [];
         $depth = 0;
@@ -126,7 +126,7 @@ final class ArrayStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnAPlaceHolderWhenRawValueIsAnEmptyArrayEvenThenReachedTheMaximumDepth(): void
+    public function shouldReturnPlaceHolderWhenRawValueIsAnEmptyArrayEvenThenReachedTheMaximumDepth(): void
     {
         $raw = [];
         $depth = 0;
@@ -164,7 +164,7 @@ final class ArrayStringifierTest extends TestCase
         $stringifierMock
             ->expects($this->any())
             ->method('stringify')
-            ->willReturnCallback(function ($raw): string {
+            ->willReturnCallback(static function ($raw): string {
                 return (string) $raw;
             });
 
@@ -194,7 +194,7 @@ final class ArrayStringifierTest extends TestCase
         $stringifierMock
             ->expects($this->any())
             ->method('stringify')
-            ->willReturnCallback(function ($raw): string {
+            ->willReturnCallback(static function ($raw): string {
                 if (is_array($raw)) {
                     return 'nested';
                 }
@@ -228,7 +228,7 @@ final class ArrayStringifierTest extends TestCase
         $stringifierMock
             ->expects($this->any())
             ->method('stringify')
-            ->willReturnCallback(function ($raw): string {
+            ->willReturnCallback(static function ($raw): string {
                 return (string) $raw;
             });
 
@@ -258,7 +258,7 @@ final class ArrayStringifierTest extends TestCase
         $stringifierMock
             ->expects($this->any())
             ->method('stringify')
-            ->willReturnCallback(function ($raw): string {
+            ->willReturnCallback(static function ($raw): string {
                 return (string) $raw;
             });
 
@@ -277,7 +277,7 @@ final class ArrayStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldUseAPlaceholderWhenLimitOfItemsIsReached(): void
+    public function shouldUsePlaceholderWhenLimitOfItemsIsReached(): void
     {
         $itemsLimit = 5;
 
@@ -290,7 +290,7 @@ final class ArrayStringifierTest extends TestCase
         $stringifierMock
             ->expects($this->any())
             ->method('stringify')
-            ->willReturnCallback(function ($raw): string {
+            ->willReturnCallback(static function ($raw): string {
                 return (string) $raw;
             });
 

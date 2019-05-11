@@ -52,10 +52,6 @@ final class DateTimeStringifierTest extends TestCase
      * @test
      *
      * @dataProvider validValuesProvider
-     *
-     * @param DateTimeInterface $raw
-     * @param string $format
-     * @param string $expected
      */
     public function shouldConvertDateTimeInterfaceToString(
         DateTimeInterface $raw,
@@ -85,6 +81,9 @@ final class DateTimeStringifierTest extends TestCase
         self::assertSame($expected, $dateTimeStringifier->stringify($raw, $depth));
     }
 
+    /**
+     * @return mixed[][]
+     */
     public function validValuesProvider(): array
     {
         $dateTime = DateTime::createFromFormat('Y-m-d\TH:i:sP', '2017-12-31T23:59:59+00:00');

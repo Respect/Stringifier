@@ -41,13 +41,6 @@ final class DateTimeStringifier implements Stringifier
      */
     private $format;
 
-    /**
-     * Initializes the stringifier.
-     *
-     * @param Stringifier $stringifier
-     * @param Quoter $quoter
-     * @param string $format
-     */
     public function __construct(Stringifier $stringifier, Quoter $quoter, string $format)
     {
         $this->stringifier = $stringifier;

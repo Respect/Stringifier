@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Test\Stringifiers;
 
-namespace Respect\Stringifier\Test\Stringifiers;
-
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\ClusterStringifier;
@@ -111,7 +109,7 @@ final class ClusterStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateADefaultClusterStringifier(): void
+    public function shouldCreateDefaultClusterStringifier(): void
     {
         self::assertInstanceOf(ClusterStringifier::class, ClusterStringifier::createDefault());
     }

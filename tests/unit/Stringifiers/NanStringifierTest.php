@@ -16,6 +16,7 @@ namespace Respect\Stringifier\Test\Stringifiers;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\NanStringifier;
+use function acos;
 
 /**
  * @covers \Respect\Stringifier\Stringifiers\NanStringifier
@@ -27,7 +28,7 @@ final class NanStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldNotConvertToStringWhenRawValueIsNotAFloat(): void
+    public function shouldNotConvertToStringWhenRawValueIsNotFloat(): void
     {
         $raw = 'string';
         $depth = 0;
@@ -45,7 +46,7 @@ final class NanStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldNotConvertToStringWhenRawValueIsANumber(): void
+    public function shouldNotConvertToStringWhenRawValueIsNumber(): void
     {
         $raw = 1.00000000002;
         $depth = 0;
@@ -63,7 +64,7 @@ final class NanStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldConvertToStringWhenRawValueIsNotANumber(): void
+    public function shouldConvertToStringWhenRawValueIsNotNumber(): void
     {
         $raw = acos(8);
         $depth = 0;

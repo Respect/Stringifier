@@ -29,8 +29,6 @@ final class ClusterStringifier implements Stringifier
     private $stringifiers;
 
     /**
-     * Initializes the stringifier.
-     *
      * @param Stringifier[] ...$stringifiers
      */
     public function __construct(Stringifier ...$stringifiers)
@@ -70,9 +68,7 @@ final class ClusterStringifier implements Stringifier
     }
 
     /**
-     * Set stringifiers.
-     *
-     * @param array $stringifiers
+     * @param Stringifier[] $stringifiers
      */
     public function setStringifiers(array $stringifiers): void
     {
@@ -83,11 +79,6 @@ final class ClusterStringifier implements Stringifier
         }
     }
 
-    /**
-     * Add a stringifier to the chain
-     *
-     * @param Stringifier $stringifier
-     */
     public function addStringifier(Stringifier $stringifier): void
     {
         $this->stringifiers[] = $stringifier;
@@ -100,7 +91,7 @@ final class ClusterStringifier implements Stringifier
     {
         foreach ($this->stringifiers as $stringifier) {
             $string = $stringifier->stringify($value, $depth);
-            if (null === $string) {
+            if ($string === null) {
                 continue;
             }
 

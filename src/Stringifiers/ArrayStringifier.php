@@ -16,8 +16,10 @@ namespace Respect\Stringifier\Stringifiers;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use function array_keys;
+use function count;
 use function implode;
 use function is_array;
+use function range;
 use function sprintf;
 
 /**
@@ -47,14 +49,6 @@ final class ArrayStringifier implements Stringifier
      */
     private $itemsLimit;
 
-    /**
-     * Initializes the stringifier.
-     *
-     * @param Stringifier $stringifier
-     * @param Quoter $quoter
-     * @param int $maximumDepth
-     * @param int $itemsLimit
-     */
     public function __construct(Stringifier $stringifier, Quoter $quoter, int $maximumDepth, int $itemsLimit)
     {
         $this->stringifier = $stringifier;
@@ -90,7 +84,7 @@ final class ArrayStringifier implements Stringifier
             }
 
             $items[$itemsCount] = '';
-            if (false === $isSequential) {
+            if ($isSequential === false) {
                 $items[$itemsCount] .= sprintf('%s: ', $this->stringifier->stringify($key, $depth + 1));
             }
             $items[$itemsCount] .= $this->stringifier->stringify($value, $depth + 1);
@@ -100,11 +94,7 @@ final class ArrayStringifier implements Stringifier
     }
 
     /**
-     * Returns whether the array is sequential or not.
-     *
-     * @param array $array
-     *
-     * @return bool
+     * @param mixed[] $array
      */
     private function isSequential(array $array): bool
     {

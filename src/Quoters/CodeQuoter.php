@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Respect\Stringifier\Quoters;
 
 use Respect\Stringifier\Quoter;
+use function sprintf;
 
 /**
  * Add "`" quotes around a string depending on its level.
@@ -27,7 +28,7 @@ final class CodeQuoter implements Quoter
      */
     public function quote(string $string, int $depth): string
     {
-        if (0 === $depth) {
+        if ($depth === 0) {
             return sprintf('`%s`', $string);
         }
 

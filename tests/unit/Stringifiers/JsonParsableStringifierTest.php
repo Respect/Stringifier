@@ -27,7 +27,7 @@ final class JsonParsableStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnNullWhenNotPossibleToConvertToAJsonParsableString(): void
+    public function shouldReturnNullWhenNotPossibleToConvertToParsableJsonString(): void
     {
         $raw = tmpfile();
         $depth = 0;
@@ -40,7 +40,7 @@ final class JsonParsableStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldConvertRawValueToAJsonParsableString(): void
+    public function shouldConvertRawValueToParsableJsonString(): void
     {
         $raw = 'É uma \' " string';
         $depth = 0;

@@ -39,3 +39,7 @@ jobs:
     - stage: Quality assurance
       env: DOCHEADER
       script: vendor/bin/docheader check src/ tests/
+
+    - stage: Quality assurance
+      env: CODE_STANDARD
+      script: vendor/bin/phpcs

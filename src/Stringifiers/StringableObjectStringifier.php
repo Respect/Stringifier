@@ -29,11 +29,6 @@ final class StringableObjectStringifier implements Stringifier
      */
     private $stringifier;
 
-    /**
-     * Initializes the stringifier.
-     *
-     * @param Stringifier $stringifier
-     */
     public function __construct(Stringifier $stringifier)
     {
         $this->stringifier = $stringifier;

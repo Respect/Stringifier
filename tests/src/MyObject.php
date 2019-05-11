@@ -11,16 +11,22 @@
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier;
+namespace Respect\Stringifier\Test;
 
-interface Quoter
+final class MyObject
 {
     /**
-     * Should add quotes to the given string.
-     *
-     * @param string $string The string to add quotes to
-     * @param int $depth The current depth
-     *
+     * @var bool
      */
-    public function quote(string $string, int $depth): string;
+    public $foo = true;
+
+    /**
+     * @var float
+     */
+    private $bar = .3;
+
+    /**
+     * @var int[]
+     */
+    private $baz = [1, 2, 3];
 }

@@ -38,12 +38,6 @@ final class ThrowableStringifier implements Stringifier
      */
     private $quoter;
 
-    /**
-     * Initializes the stringifier.
-     *
-     * @param Stringifier $stringifier
-     * @param Quoter $quoter
-     */
     public function __construct(Stringifier $stringifier, Quoter $quoter)
     {
         $this->stringifier = $stringifier;
@@ -69,6 +63,9 @@ final class ThrowableStringifier implements Stringifier
         );
     }
 
+    /**
+     * @return mixed[]
+     */
     private function getData(Throwable $throwable): array
     {
         return [

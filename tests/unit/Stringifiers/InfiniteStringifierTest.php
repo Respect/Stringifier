@@ -16,6 +16,7 @@ namespace Respect\Stringifier\Test\Stringifiers;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\InfiniteStringifier;
+use const INF;
 
 /**
  * @covers \Respect\Stringifier\Stringifiers\InfiniteStringifier

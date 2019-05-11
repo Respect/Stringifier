@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Test\Stringifiers;
 
-use JsonSerializable;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\JsonSerializableStringifier;
+use Respect\Stringifier\Test\MyJsonSerializable;
 use stdClass;
 
 /**
@@ -30,20 +30,20 @@ final class JsonSerializableStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldConvertToStringWhenRawValueIsAJsonSerializableObject(): void
+    public function shouldConvertToStringWhenRawValueIsJsonSerializableObject(): void
     {
-        $raw = new JsonSerializableObject();
+        $raw = new MyJsonSerializable();
         $depth = 0;
 
         $stringifiedData = '-stringified-';
 
-        $expectedValue = '[json-serializable] ('.JsonSerializableObject::class.': '.$stringifiedData.')';
+        $expectedValue = '[json-serializable] ('.MyJsonSerializable::class.': '.$stringifiedData.')';
 
         $stringifierMock = $this->createMock(Stringifier::class);
         $stringifierMock
             ->expects($this->once())
             ->method('stringify')
-            ->with(JsonSerializableObject::JSON_VALUE, $depth + 1)
+            ->with(MyJsonSerializable::JSON_VALUE, $depth + 1)
             ->willReturn($stringifiedData);
 
         $quoterMock = $this->createMock(Quoter::class);
@@ -79,15 +79,5 @@ final class JsonSerializableStringifierTest extends TestCase
         $jsonSerializableStringifier = new JsonSerializableStringifier($stringifierMock, $quoterMock);
 
         self::assertNull($jsonSerializableStringifier->stringify($raw, $depth));
-    }
-}
-
-final class JsonSerializableObject implements JsonSerializable
-{
-    public const JSON_VALUE = [1, true, 'foo', null];
-
-    public function jsonSerialize(): array
-    {
-        return self::JSON_VALUE;
     }
 }

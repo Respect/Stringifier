@@ -28,11 +28,6 @@ final class NullStringifier implements Stringifier
      */
     private $quoter;
 
-    /**
-     * Initializes the stringifier.
-     *
-     * @param Quoter $quoter
-     */
     public function __construct(Quoter $quoter)
     {
         $this->quoter = $quoter;
@@ -43,7 +38,7 @@ final class NullStringifier implements Stringifier
      */
     public function stringify($raw, int $depth): ?string
     {
-        if (null !== $raw) {
+        if ($raw !== null) {
             return null;
         }
 

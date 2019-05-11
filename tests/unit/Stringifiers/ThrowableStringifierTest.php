@@ -37,9 +37,6 @@ final class ThrowableStringifierTest extends TestCase
      * @test
      *
      * @dataProvider validValuesProvider
-     *
-     * @param Throwable $raw
-     * @param int $line
      */
     public function shouldConvertThrowableToString(Throwable $raw, int $line): void
     {
@@ -78,15 +75,16 @@ final class ThrowableStringifierTest extends TestCase
         self::assertSame($expectedValue, $throwableStringifier->stringify($raw, $depth));
     }
 
+    /**
+     * @return mixed[][]
+     */
     public function validValuesProvider(): array
     {
-        $line = 85;
-
         return [
-            [new Exception('Message for Exception', 0), ++$line],
-            [new ErrorException('Message for ErrorException', 102), ++$line],
-            [new Error('Message for Error', 78), ++$line],
-            [new TypeError('Message for TypeError', 1009), ++$line],
+            [new Exception('Message for Exception', 0), __LINE__],
+            [new ErrorException('Message for ErrorException', 102), __LINE__],
+            [new Error('Message for Error', 78), __LINE__],
+            [new TypeError('Message for TypeError', 1009), __LINE__],
         ];
     }
 

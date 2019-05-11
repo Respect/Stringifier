@@ -11,16 +11,19 @@
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier;
+namespace Respect\Stringifier\Test;
 
-interface Quoter
+use JsonSerializable;
+
+final class MyJsonSerializable implements JsonSerializable
 {
+    public const JSON_VALUE = [1, 2, 3];
+
     /**
-     * Should add quotes to the given string.
-     *
-     * @param string $string The string to add quotes to
-     * @param int $depth The current depth
-     *
+     * @return int[]
      */
-    public function quote(string $string, int $depth): string;
+    public function jsonSerialize(): array
+    {
+        return self::JSON_VALUE;
+    }
 }

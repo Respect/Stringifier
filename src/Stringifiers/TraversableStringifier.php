@@ -18,6 +18,7 @@ use Respect\Stringifier\Stringifier;
 use Traversable;
 use function get_class;
 use function iterator_to_array;
+use function sprintf;
 
 /**
  * Converts an instance of Traversable into a string.
@@ -36,12 +37,6 @@ final class TraversableStringifier implements Stringifier
      */
     private $quoter;
 
-    /**
-     * Initializes the stringifier.
-     *
-     * @param Stringifier $stringifier
-     * @param Quoter $quoter
-     */
     public function __construct(Stringifier $stringifier, Quoter $quoter)
     {
         $this->stringifier = $stringifier;

@@ -16,6 +16,7 @@ namespace Respect\Stringifier\Test\Stringifiers;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\StringableObjectStringifier;
+use Respect\Stringifier\Test\MyStringable;
 use stdClass;
 
 /**
@@ -46,7 +47,7 @@ final class StringableObjectStringifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldNotConvertToStringWhenValueIsANonStringableObject(): void
+    public function shouldNotConvertToStringWhenValueIsNonStringableObject(): void
     {
         $raw = new stdClass();
         $depth = 1;
@@ -66,30 +67,20 @@ final class StringableObjectStringifierTest extends TestCase
      */
     public function shouldConvertToStringWhenValueIsAnStringableObject(): void
     {
-        $raw = new StringableObject();
+        $raw = new MyStringable();
         $depth = 0;
 
-        $expectedValue = StringableObject::STRING_VALUE;
+        $expectedValue = MyStringable::STRING_VALUE;
 
         $stringifierMock = $this->createMock(Stringifier::class);
         $stringifierMock
             ->expects($this->once())
             ->method('stringify')
-            ->with(StringableObject::STRING_VALUE, $depth)
+            ->with(MyStringable::STRING_VALUE, $depth)
             ->willReturn($expectedValue);
 
         $stringableObjectStringifier = new StringableObjectStringifier($stringifierMock);
 
         self::assertSame($expectedValue, $stringableObjectStringifier->stringify($raw, $depth));
-    }
-}
-
-final class StringableObject
-{
-    public const STRING_VALUE = 'String';
-
-    public function __toString()
-    {
-        return self::STRING_VALUE;
     }
 }

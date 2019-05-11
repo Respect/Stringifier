@@ -1,18 +1,14 @@
 --FILE--
 <?php
+
+declare(strict_types=1);
+
 require 'vendor/autoload.php';
 
+use Respect\Stringifier\Test\MyTraversable;
 use function Respect\Stringifier\stringify;
 
-final class MyObject implements IteratorAggregate
-{
-    public function getIterator(): Traversable
-    {
-        return new ArrayIterator([1, 2, 3]);
-    }
-}
-
-echo stringify(new MyObject());
+echo stringify(new MyTraversable());
 ?>
 --EXPECT--
-`[traversable] (MyObject: { 1, 2, 3 })`
+`[traversable] (Respect\Stringifier\Test\MyTraversable: { 1, 2, 3 })`

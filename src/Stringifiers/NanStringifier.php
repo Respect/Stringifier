@@ -30,11 +30,6 @@ final class NanStringifier implements Stringifier
      */
     private $quoter;
 
-    /**
-     * Initializes the stringifier.
-     *
-     * @param Quoter $quoter
-     */
     public function __construct(Quoter $quoter)
     {
         $this->quoter = $quoter;
