@@ -2,11 +2,8 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
@@ -16,21 +13,18 @@ namespace Respect\Stringifier\Test\Stringifiers;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\DateTimeStringifier;
 
-/**
- * @covers \Respect\Stringifier\Stringifiers\DateTimeStringifier
- *
- * @author Henrique Moody <henriquemoody@gmail.com>
- */
+#[CoversClass(DateTimeStringifier::class)]
 final class DateTimeStringifierTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldNotConvertWhenNotInstanceOfDateTimeInterface(): void
     {
         $stringifierMock = $this->createMock(Stringifier::class);
@@ -48,11 +42,8 @@ final class DateTimeStringifierTest extends TestCase
         self::assertNull($dateTimeStringifier->stringify('NotDateTimeInterface', 0));
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider validValuesProvider
-     */
+    #[Test]
+    #[DataProvider('validValuesProvider')]
     public function shouldConvertDateTimeInterfaceToString(
         DateTimeInterface $raw,
         string $format,
@@ -84,9 +75,9 @@ final class DateTimeStringifierTest extends TestCase
     /**
      * @return mixed[][]
      */
-    public function validValuesProvider(): array
+    public static function validValuesProvider(): array
     {
-        $dateTime = DateTime::createFromFormat('Y-m-d\TH:i:sP', '2017-12-31T23:59:59+00:00');
+        $dateTime = new DateTime('2017-12-31T23:59:59+00:00');
         $dateTimeImmutable = DateTimeImmutable::createFromMutable($dateTime);
 
         return [

@@ -2,32 +2,25 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test\Stringifiers;
+namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\ClusterStringifier;
 use stdClass;
 
-/**
- * @covers \Respect\Stringifier\Stringifiers\ClusterStringifier
- *
- * @author Henrique Moody <henriquemoody@gmail.com>
- */
+#[CoversClass(ClusterStringifier::class)]
 final class ClusterStringifierTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnNullWhenNoStringifiersAreDefined(): void
     {
         $raw = new stdClass();
@@ -38,9 +31,7 @@ final class ClusterStringifierTest extends TestCase
         self::assertNull($clusterStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldUseAllStringifierToStringifyUntilNonFails(): void
     {
         $raw = new stdClass();
@@ -72,9 +63,7 @@ final class ClusterStringifierTest extends TestCase
         self::assertSame($expected, $clusterStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnNullWhenAllStringifierCannotConvertToString(): void
     {
         $raw = new stdClass();
@@ -106,9 +95,7 @@ final class ClusterStringifierTest extends TestCase
         self::assertNull($clusterStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldCreateDefaultClusterStringifier(): void
     {
         self::assertInstanceOf(ClusterStringifier::class, ClusterStringifier::createDefault());

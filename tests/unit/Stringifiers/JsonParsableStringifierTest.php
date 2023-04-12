@@ -2,31 +2,25 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test\Stringifiers;
+namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Stringifiers\JsonParsableStringifier;
+
 use function tmpfile;
 
-/**
- * @covers \Respect\Stringifier\Stringifiers\JsonParsableStringifier
- *
- * @author Henrique Moody <henriquemoody@gmail.com>
- */
+#[CoversClass(JsonParsableStringifier::class)]
 final class JsonParsableStringifierTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnNullWhenNotPossibleToConvertToParsableJsonString(): void
     {
         $raw = tmpfile();
@@ -37,9 +31,7 @@ final class JsonParsableStringifierTest extends TestCase
         self::assertNull($jsonSerializableStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertRawValueToParsableJsonString(): void
     {
         $raw = 'É uma \' " string';

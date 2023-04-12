@@ -2,20 +2,20 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test\Stringifiers;
+namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
 use Error;
 use ErrorException;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
@@ -23,21 +23,14 @@ use Respect\Stringifier\Stringifiers\ThrowableStringifier;
 use stdClass;
 use Throwable;
 use TypeError;
-use function get_class;
+
 use function sprintf;
 
-/**
- * @covers \Respect\Stringifier\Stringifiers\ThrowableStringifier
- *
- * @author Henrique Moody <henriquemoody@gmail.com>
- */
+#[CoversClass(ThrowableStringifier::class)]
 final class ThrowableStringifierTest extends TestCase
 {
-    /**
-     * @test
-     *
-     * @dataProvider validValuesProvider
-     */
+    #[Test]
+    #[DataProvider('validValuesProvider')]
     public function shouldConvertThrowableToString(Throwable $raw, int $line): void
     {
         $depth = 1;
@@ -46,14 +39,14 @@ final class ThrowableStringifierTest extends TestCase
 
         $expectedValue = sprintf(
             '[throwable] (%s: %s)',
-            get_class($raw),
+            $raw::class,
             $stringifiedData
         );
 
         $expectedData = [
             'message' => $raw->getMessage(),
             'code' => $raw->getCode(),
-            'file' => 'tests/unit/Stringifiers/ThrowableStringifierTest.php:'.$line,
+            'file' => 'tests/unit/Stringifiers/ThrowableStringifierTest.php:' . $line,
         ];
 
         $stringifierMock = $this->createMock(Stringifier::class);
@@ -75,22 +68,7 @@ final class ThrowableStringifierTest extends TestCase
         self::assertSame($expectedValue, $throwableStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @return mixed[][]
-     */
-    public function validValuesProvider(): array
-    {
-        return [
-            [new Exception('Message for Exception', 0), __LINE__],
-            [new ErrorException('Message for ErrorException', 102), __LINE__],
-            [new Error('Message for Error', 78), __LINE__],
-            [new TypeError('Message for TypeError', 1009), __LINE__],
-        ];
-    }
-
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnNullWhenNotInstanceOfThrowable(): void
     {
         $stringifierMock = $this->createMock(Stringifier::class);
@@ -106,5 +84,18 @@ final class ThrowableStringifierTest extends TestCase
         $throwableStringifier = new ThrowableStringifier($stringifierMock, $quoterMock);
 
         self::assertNull($throwableStringifier->stringify(new stdClass(), 0));
+    }
+
+    /**
+     * @return mixed[][]
+     */
+    public static function validValuesProvider(): array
+    {
+        return [
+            [new Exception('Message for Exception', 0), __LINE__],
+            [new ErrorException('Message for ErrorException', 102), __LINE__],
+            [new Error('Message for Error', 78), __LINE__],
+            [new TypeError('Message for TypeError', 1009), __LINE__],
+        ];
     }
 }

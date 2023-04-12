@@ -2,28 +2,27 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test\Stringifiers;
+namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\ArrayStringifier;
+
 use function is_array;
 
+#[CoversClass(ArrayStringifier::class)]
 final class ArrayStringifierTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldNotConvertToStringWhenRawValueIsNotAnArray(): void
     {
         $raw = false;
@@ -44,9 +43,7 @@ final class ArrayStringifierTest extends TestCase
         self::assertNull($arrayStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnPlaceHolderWhenDepthIsEqualsToMaximumDepth(): void
     {
         $raw = [1, 2, 3];
@@ -70,9 +67,7 @@ final class ArrayStringifierTest extends TestCase
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnPlaceHolderWhenDepthIsBiggerThanMaximumDepth(): void
     {
         $raw = [1, 2, 3];
@@ -96,9 +91,7 @@ final class ArrayStringifierTest extends TestCase
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnPlaceHolderWhenRawValueIsAnEmptyArray(): void
     {
         $raw = [];
@@ -123,9 +116,7 @@ final class ArrayStringifierTest extends TestCase
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnPlaceHolderWhenRawValueIsAnEmptyArrayEvenThenReachedTheMaximumDepth(): void
     {
         $raw = [];
@@ -150,9 +141,7 @@ final class ArrayStringifierTest extends TestCase
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenRawValueIsAnArray(): void
     {
         $raw = [1, 2, 3];
@@ -180,9 +169,7 @@ final class ArrayStringifierTest extends TestCase
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenRawValueIsNested(): void
     {
         $raw = [1, [2, 3], 4, 5, [6]];
@@ -214,9 +201,7 @@ final class ArrayStringifierTest extends TestCase
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenKeysAreNotSequential(): void
     {
         $raw = [1, 2, 3 => 3];
@@ -244,9 +229,7 @@ final class ArrayStringifierTest extends TestCase
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenKeysAreNotInteger(): void
     {
         $raw = ['foo' => 1, 'bar' => 2];
@@ -274,9 +257,7 @@ final class ArrayStringifierTest extends TestCase
         self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldUsePlaceholderWhenLimitOfItemsIsReached(): void
     {
         $itemsLimit = 5;

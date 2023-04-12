@@ -2,32 +2,26 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test\Stringifiers;
+namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\InfiniteStringifier;
+
 use const INF;
 
-/**
- * @covers \Respect\Stringifier\Stringifiers\InfiniteStringifier
- *
- * @author Henrique Moody <henriquemoody@gmail.com>
- */
+#[CoversClass(InfiniteStringifier::class)]
 final class InfiniteStringifierTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldNotConvertToStringWhenRawValueIsNotFloat(): void
     {
         $raw = 1;
@@ -43,9 +37,7 @@ final class InfiniteStringifierTest extends TestCase
         self::assertNull($infiniteStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldNotConvertToStringWhenRawValueIsFiniteFloat(): void
     {
         $raw = 1.0;
@@ -61,9 +53,7 @@ final class InfiniteStringifierTest extends TestCase
         self::assertNull($infiniteStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenRawValueIsInfinitePositive(): void
     {
         $raw = INF;
@@ -83,9 +73,7 @@ final class InfiniteStringifierTest extends TestCase
         self::assertSame($expected, $infiniteStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenRawValueIsInfiniteNegative(): void
     {
         $raw = -1 * INF;

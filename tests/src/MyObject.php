@@ -2,11 +2,8 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
@@ -15,18 +12,12 @@ namespace Respect\Stringifier\Test;
 
 final class MyObject
 {
-    /**
-     * @var bool
-     */
-    public $foo = true;
+    public bool $foo = true;
 
-    /**
-     * @var float
-     */
-    private $bar = .3;
+    private float $bar = .3; // @phpstan-ignore-line
 
     /**
      * @var int[]
      */
-    private $baz = [1, 2, 3];
+    private array $baz = [1, 2, 3]; // @phpstan-ignore-line
 }

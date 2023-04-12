@@ -2,32 +2,26 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test\Stringifiers;
+namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\NanStringifier;
+
 use function acos;
 
-/**
- * @covers \Respect\Stringifier\Stringifiers\NanStringifier
- *
- * @author Henrique Moody <henriquemoody@gmail.com>
- */
+#[CoversClass(NanStringifier::class)]
 final class NanStringifierTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldNotConvertToStringWhenRawValueIsNotFloat(): void
     {
         $raw = 'string';
@@ -43,9 +37,7 @@ final class NanStringifierTest extends TestCase
         self::assertNull($nanStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldNotConvertToStringWhenRawValueIsNumber(): void
     {
         $raw = 1.00000000002;
@@ -61,9 +53,7 @@ final class NanStringifierTest extends TestCase
         self::assertNull($nanStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenRawValueIsNotNumber(): void
     {
         $raw = acos(8);

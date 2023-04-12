@@ -2,33 +2,26 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test\Stringifiers;
+namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
 use ArrayIterator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\TraversableStringifier;
 
-/**
- * @covers \Respect\Stringifier\Stringifiers\TraversableStringifier
- *
- * @author Henrique Moody <henriquemoody@gmail.com>
- */
+#[CoversClass(TraversableStringifier::class)]
 final class TraversableStringifierTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenValueIsTraversable(): void
     {
         $raw = new ArrayIterator([1, 2, 3]);
@@ -36,7 +29,7 @@ final class TraversableStringifierTest extends TestCase
 
         $stringifiedData = '-stringified-';
 
-        $expectedValue = '[traversable] (ArrayIterator: '.$stringifiedData.')';
+        $expectedValue = '[traversable] (ArrayIterator: ' . $stringifiedData . ')';
 
         $stringifierMock = $this->createMock(Stringifier::class);
         $stringifierMock
@@ -57,9 +50,7 @@ final class TraversableStringifierTest extends TestCase
         self::assertSame($expectedValue, $traversableStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldNotConvertToStringWhenRawValueIsNotTraversable(): void
     {
         $raw = [1, 2, 3, 4];

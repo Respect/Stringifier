@@ -2,31 +2,24 @@
 
 /*
  * This file is part of Respect/Stringifier.
- *
- * (c) Henrique Moody <henriquemoody@gmail.com>
- *
- * For the full copyright and license information, please view the "LICENSE.md"
- * file that was distributed with this source code.
+ * Copyright (c) Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-License-Identifier: MIT
  */
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test\Stringifiers;
+namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\BoolStringifier;
 
-/**
- * @covers \Respect\Stringifier\Stringifiers\BoolStringifier
- *
- * @author Henrique Moody <henriquemoody@gmail.com>
- */
+#[CoversClass(BoolStringifier::class)]
 final class BoolStringifierTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldNotConvertToStringWhenRawValueIsNotBoolean(): void
     {
         $raw = 1;
@@ -42,9 +35,7 @@ final class BoolStringifierTest extends TestCase
         self::assertNull($boolStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenRawValueIsTrue(): void
     {
         $raw = true;
@@ -64,9 +55,7 @@ final class BoolStringifierTest extends TestCase
         self::assertSame($expected, $boolStringifier->stringify($raw, $depth));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldConvertToStringWhenRawValueIsFalse(): void
     {
         $raw = false;
