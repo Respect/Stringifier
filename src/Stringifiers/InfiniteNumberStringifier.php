@@ -16,7 +16,7 @@ use Respect\Stringifier\Stringifier;
 use function is_float;
 use function is_infinite;
 
-final class InfiniteStringifier implements Stringifier
+final class InfiniteNumberStringifier implements Stringifier
 {
     public function __construct(
         private readonly Quoter $quoter
