@@ -11,5 +11,5 @@ outputMultiple(
 );
 ?>
 --EXPECT--
-`TRUE`
-`FALSE`
+`true`
+`false`

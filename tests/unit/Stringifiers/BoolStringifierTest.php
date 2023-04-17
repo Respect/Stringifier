@@ -13,65 +13,45 @@ namespace Respect\Stringifier\Test\Unit\Stringifiers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\BoolStringifier;
+use Respect\Stringifier\Test\Double\FakeQuoter;
 
 #[CoversClass(BoolStringifier::class)]
 final class BoolStringifierTest extends TestCase
 {
+    private const DEPTH = 0;
+
     #[Test]
-    public function shouldNotConvertToStringWhenRawValueIsNotBoolean(): void
+    public function itShouldNotStringifyWhenRawValueIsNotBoolean(): void
     {
-        $raw = 1;
-        $depth = 0;
+        $sut = new BoolStringifier(new FakeQuoter());
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->never())
-            ->method('quote');
-
-        $boolStringifier = new BoolStringifier($quoterMock);
-
-        self::assertNull($boolStringifier->stringify($raw, $depth));
+        self::assertNull($sut->stringify(1, self::DEPTH));
     }
 
     #[Test]
-    public function shouldConvertToStringWhenRawValueIsTrue(): void
+    public function itShouldStringifyRawValueWhenItIsTrue(): void
     {
-        $raw = true;
-        $depth = 0;
+        $quoter = new FakeQuoter();
 
-        $expected = 'TRUE';
+        $sut = new BoolStringifier($quoter);
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
+        $actual = $sut->stringify(true, self::DEPTH);
+        $expected = $quoter->quote('true', self::DEPTH);
 
-        $boolStringifier = new BoolStringifier($quoterMock);
-
-        self::assertSame($expected, $boolStringifier->stringify($raw, $depth));
+        self::assertSame($expected, $actual);
     }
 
     #[Test]
-    public function shouldConvertToStringWhenRawValueIsFalse(): void
+    public function itShouldStringifyRawValueWhenItIsFalse(): void
     {
-        $raw = false;
-        $depth = 0;
+        $quoter = new FakeQuoter();
 
-        $expected = 'FALSE';
+        $sut = new BoolStringifier($quoter);
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
+        $actual = $sut->stringify(false, self::DEPTH);
+        $expected = $quoter->quote('false', self::DEPTH);
 
-        $boolStringifier = new BoolStringifier($quoterMock);
-
-        self::assertSame($expected, $boolStringifier->stringify($raw, $depth));
+        self::assertSame($expected, $actual);
     }
 }

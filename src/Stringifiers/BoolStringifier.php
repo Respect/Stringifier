@@ -28,6 +28,6 @@ final class BoolStringifier implements Stringifier
             return null;
         }
 
-        return $this->quoter->quote($raw ? 'TRUE' : 'FALSE', $depth);
+        return $this->quoter->quote($raw ? 'true' : 'false', $depth);
     }
 }
