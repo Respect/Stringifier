@@ -41,7 +41,7 @@ final class ClusterStringifier implements Stringifier
         $jsonParsableStringifier = new JsonParsableStringifier();
 
         $stringifier->setStringifiers([
-            new TraversableStringifier($stringifier, $quoter),
+            new IteratorObjectStringifier($stringifier, $quoter),
             new DateTimeStringifier($quoter, DateTimeInterface::ATOM),
             new ThrowableStringifier($stringifier, $quoter),
             new StringableObjectStringifier($jsonParsableStringifier, $quoter),

@@ -10,14 +10,13 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use Iterator;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
-use Traversable;
 
-use function iterator_to_array;
 use function sprintf;
 
-final class TraversableStringifier implements Stringifier
+final class IteratorObjectStringifier implements Stringifier
 {
     public function __construct(
         private readonly Stringifier $stringifier,
@@ -27,15 +26,15 @@ final class TraversableStringifier implements Stringifier
 
     public function stringify(mixed $raw, int $depth): ?string
     {
-        if (!$raw instanceof Traversable) {
+        if (!$raw instanceof Iterator) {
             return null;
         }
 
         return $this->quoter->quote(
             sprintf(
-                '[traversable] (%s: %s)',
+                '%s { current() => %s }',
                 $raw::class,
-                $this->stringifier->stringify(iterator_to_array($raw), $depth + 1)
+                $this->stringifier->stringify($raw->current(), $depth + 1)
             ),
             $depth
         );
