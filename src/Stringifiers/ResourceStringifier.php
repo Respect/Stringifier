@@ -30,12 +30,6 @@ final class ResourceStringifier implements Stringifier
             return null;
         }
 
-        return $this->quoter->quote(
-            sprintf(
-                '[resource] (%s)',
-                get_resource_type($raw)
-            ),
-            $depth
-        );
+        return $this->quoter->quote(sprintf('resource <%s>', get_resource_type($raw)), $depth);
     }
 }

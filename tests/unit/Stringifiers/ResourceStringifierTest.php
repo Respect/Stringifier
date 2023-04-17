@@ -13,47 +13,34 @@ namespace Respect\Stringifier\Test\Unit\Stringifiers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\ResourceStringifier;
+use Respect\Stringifier\Test\Double\FakeQuoter;
 
 use function tmpfile;
 
 #[CoversClass(ResourceStringifier::class)]
 final class ResourceStringifierTest extends TestCase
 {
+    private const DEPTH = 0;
+
     #[Test]
-    public function shouldNotConvertToStringWhenRawValueIsNotResource(): void
+    public function itShouldNotStringifyRawValueWhenItIsNotOfTypeResource(): void
     {
-        $raw = true;
-        $depth = 0;
+        $sut = new ResourceStringifier(new FakeQuoter());
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->never())
-            ->method('quote');
-
-        $resourceStringifier = new ResourceStringifier($quoterMock);
-
-        self::assertNull($resourceStringifier->stringify($raw, $depth));
+        self::assertNull($sut->stringify(true, self::DEPTH));
     }
 
     #[Test]
-    public function shouldConvertToStringWhenRawValueIsNotResource(): void
+    public function itShouldStringifyRawValueWhenItIsOfTypeResource(): void
     {
-        $raw = tmpfile();
-        $depth = 0;
+        $quoter = new FakeQuoter();
 
-        $expected = '[resource] (stream)';
+        $sut = new ResourceStringifier($quoter);
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
+        $actual = $sut->stringify(tmpfile(), self::DEPTH);
+        $expected = $quoter->quote('resource <stream>', self::DEPTH);
 
-        $resourceStringifier = new ResourceStringifier($quoterMock);
-
-        self::assertSame($expected, $resourceStringifier->stringify($raw, $depth));
+        self::assertSame($expected, $actual);
     }
 }

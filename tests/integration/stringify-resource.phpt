@@ -8,4 +8,4 @@ require 'vendor/autoload.php';
 output(tmpfile());
 ?>
 --EXPECT--
-`[resource] (stream)`
+`resource <stream>`
