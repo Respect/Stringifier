@@ -10,28 +10,33 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
+use Stringable;
 
-use function is_object;
-use function method_exists;
+use function sprintf;
 
 final class StringableObjectStringifier implements Stringifier
 {
     public function __construct(
-        private readonly Stringifier $stringifier
+        private readonly Stringifier $stringifier,
+        private readonly Quoter $quoter
     ) {
     }
 
     public function stringify(mixed $raw, int $depth): ?string
     {
-        if (!is_object($raw)) {
+        if (!$raw instanceof Stringable) {
             return null;
         }
 
-        if (!method_exists($raw, '__toString')) {
-            return null;
-        }
-
-        return $this->stringifier->stringify($raw->__toString(), $depth);
+        return $this->quoter->quote(
+            sprintf(
+                '%s { __toString() => %s }',
+                $raw::class,
+                $this->stringifier->stringify($raw->__toString(), $depth + 1)
+            ),
+            $depth
+        );
     }
 }

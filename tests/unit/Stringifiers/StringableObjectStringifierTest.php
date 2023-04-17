@@ -10,66 +10,48 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
+use ConcreteStringable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\StringableObjectStringifier;
-use Respect\Stringifier\Test\MyStringable;
+use Respect\Stringifier\Test\Double\FakeQuoter;
+use Respect\Stringifier\Test\Double\FakeStringifier;
 use stdClass;
+
+use function sprintf;
 
 #[CoversClass(StringableObjectStringifier::class)]
 final class StringableObjectStringifierTest extends TestCase
 {
+    private const DEPTH = 0;
+
     #[Test]
-    public function shouldNotConvertToStringWhenValueIsNotAnObject(): void
+    public function itShouldNotStringifyRawValueWhenItIsNotAnInstanceOfStringable(): void
     {
-        $raw = 'not-an-object';
-        $depth = 1;
+        $sut = new StringableObjectStringifier(new FakeStringifier(), new FakeQuoter());
 
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->never())
-            ->method('stringify');
-
-        $stringableObjectStringifier = new StringableObjectStringifier($stringifierMock);
-
-        self::assertNull($stringableObjectStringifier->stringify($raw, $depth));
+        self::assertNull($sut->stringify(new stdClass(), self::DEPTH));
     }
 
     #[Test]
-    public function shouldNotConvertToStringWhenValueIsNonStringableObject(): void
+    public function itShouldStringifyRawValueWhenItIsAnInstanceOfStringable(): void
     {
-        $raw = new stdClass();
-        $depth = 1;
+        $raw = new ConcreteStringable();
 
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->never())
-            ->method('stringify');
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
 
-        $stringableObjectStringifier = new StringableObjectStringifier($stringifierMock);
+        $string = $stringifier->stringify($raw->__toString(), self::DEPTH + 1);
 
-        self::assertNull($stringableObjectStringifier->stringify($raw, $depth));
-    }
+        $sut = new StringableObjectStringifier($stringifier, $quoter);
 
-    #[Test]
-    public function shouldConvertToStringWhenValueIsAnStringableObject(): void
-    {
-        $raw = new MyStringable();
-        $depth = 0;
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote(
+            sprintf('%s { __toString() => %s }', ConcreteStringable::class, $string),
+            self::DEPTH
+        );
 
-        $expectedValue = MyStringable::STRING_VALUE;
-
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->once())
-            ->method('stringify')
-            ->with(MyStringable::STRING_VALUE, $depth)
-            ->willReturn($expectedValue);
-
-        $stringableObjectStringifier = new StringableObjectStringifier($stringifierMock);
-
-        self::assertSame($expectedValue, $stringableObjectStringifier->stringify($raw, $depth));
+        self::assertSame($expected, $actual);
     }
 }

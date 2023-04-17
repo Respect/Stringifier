@@ -8,14 +8,10 @@
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test;
-
-final class MyStringable
+final class ConcreteStringable
 {
-    public const STRING_VALUE = self::class;
-
     public function __toString(): string
     {
-        return self::STRING_VALUE;
+        return 'This is the return of __toString()';
     }
 }

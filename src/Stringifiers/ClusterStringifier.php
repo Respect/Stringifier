@@ -44,7 +44,7 @@ final class ClusterStringifier implements Stringifier
             new TraversableStringifier($stringifier, $quoter),
             new DateTimeStringifier($quoter, DateTimeInterface::ATOM),
             new ThrowableStringifier($stringifier, $quoter),
-            new StringableObjectStringifier($stringifier),
+            new StringableObjectStringifier($jsonParsableStringifier, $quoter),
             new JsonSerializableObjectStringifier($jsonParsableStringifier, $quoter),
             new ObjectStringifier($stringifier, $quoter),
             new ArrayStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_ITEMS),

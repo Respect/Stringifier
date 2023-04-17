@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-output(new Respect\Stringifier\Test\MyStringable());
+output(new ConcreteStringable());
 ?>
 --EXPECT--
-"Respect\\Stringifier\\Test\\MyStringable"
+`ConcreteStringable { __toString() => "This is the return of __toString()" }`
