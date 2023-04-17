@@ -49,7 +49,7 @@ final class ClusterStringifier implements Stringifier
             new ObjectStringifier($stringifier, $quoter),
             new ArrayStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_ITEMS),
             new InfiniteStringifier($quoter),
-            new NanStringifier($quoter),
+            new NotANumberStringifier($quoter),
             new ResourceStringifier($quoter),
             new BoolStringifier($quoter),
             new NullStringifier($quoter),

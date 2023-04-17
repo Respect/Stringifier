@@ -16,7 +16,7 @@ use Respect\Stringifier\Stringifier;
 use function is_float;
 use function is_nan;
 
-final class NanStringifier implements Stringifier
+final class NotANumberStringifier implements Stringifier
 {
     public function __construct(
         private readonly Quoter $quoter
