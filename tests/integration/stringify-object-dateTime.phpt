@@ -11,5 +11,5 @@ outputMultiple(
 );
 ?>
 --EXPECT--
-`[date-time] (DateTime: "2017-12-31T23:59:59+00:00")`
-`[date-time] (DateTimeImmutable: "2017-12-31T23:59:59+00:00")`
+`DateTime { 2017-12-31T23:59:59+00:00 }`
+`DateTimeImmutable { 2017-12-31T23:59:59+00:00 }`

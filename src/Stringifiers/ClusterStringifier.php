@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use DateTimeInterface;
 use Respect\Stringifier\Quoters\CodeQuoter;
 use Respect\Stringifier\Stringifier;
 
@@ -38,7 +39,7 @@ final class ClusterStringifier implements Stringifier
         $stringifier = new self();
         $stringifier->setStringifiers([
             new TraversableStringifier($stringifier, $quoter),
-            new DateTimeStringifier($stringifier, $quoter, 'c'),
+            new DateTimeStringifier($quoter, DateTimeInterface::ATOM),
             new ThrowableStringifier($stringifier, $quoter),
             new StringableObjectStringifier($stringifier),
             new JsonSerializableStringifier($stringifier, $quoter),

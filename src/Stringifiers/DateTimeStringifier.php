@@ -19,7 +19,6 @@ use function sprintf;
 final class DateTimeStringifier implements Stringifier
 {
     public function __construct(
-        private readonly Stringifier $stringifier,
         private readonly Quoter $quoter,
         private readonly string $format
     ) {
@@ -31,13 +30,6 @@ final class DateTimeStringifier implements Stringifier
             return null;
         }
 
-        return $this->quoter->quote(
-            sprintf(
-                '[date-time] (%s: %s)',
-                $raw::class,
-                $this->stringifier->stringify($raw->format($this->format), $depth + 1)
-            ),
-            $depth
-        );
+        return $this->quoter->quote(sprintf('%s { %s }', $raw::class, $raw->format($this->format)), $depth);
     }
 }
