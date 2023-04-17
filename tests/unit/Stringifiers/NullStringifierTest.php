@@ -13,45 +13,32 @@ namespace Respect\Stringifier\Test\Unit\Stringifiers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifiers\NullStringifier;
+use Respect\Stringifier\Test\Double\FakeQuoter;
 
 #[CoversClass(NullStringifier::class)]
 final class NullStringifierTest extends TestCase
 {
+    private const DEPTH = 0;
+
     #[Test]
-    public function shouldNotConvertToStringWhenRawValueIsNotNull(): void
+    public function itShouldNotStringifyRawValueWhenItIsNotNull(): void
     {
-        $raw = 1;
-        $depth = 0;
+        $sut = new NullStringifier(new FakeQuoter());
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->never())
-            ->method('quote');
-
-        $nullStringifier = new NullStringifier($quoterMock);
-
-        self::assertNull($nullStringifier->stringify($raw, $depth));
+        self::assertNull($sut->stringify(1, self::DEPTH));
     }
 
     #[Test]
-    public function shouldConvertToStringWhenRawValueIsNull(): void
+    public function itShouldStringifyRawValueWhenItIsNull(): void
     {
-        $raw = null;
-        $depth = 0;
+        $quoter = new FakeQuoter();
 
-        $expected = 'NULL';
+        $sut = new NullStringifier($quoter);
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
+        $actual = $sut->stringify(null, self::DEPTH);
+        $expected = $quoter->quote('null', self::DEPTH);
 
-        $nullStringifier = new NullStringifier($quoterMock);
-
-        self::assertSame($expected, $nullStringifier->stringify($raw, $depth));
+        self::assertSame($expected, $actual);
     }
 }

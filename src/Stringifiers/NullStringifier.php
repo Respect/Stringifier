@@ -26,6 +26,6 @@ final class NullStringifier implements Stringifier
             return null;
         }
 
-        return $this->quoter->quote('NULL', $depth);
+        return $this->quoter->quote('null', $depth);
     }
 }

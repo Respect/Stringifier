@@ -8,4 +8,4 @@ require 'vendor/autoload.php';
 output(null);
 ?>
 --EXPECT--
-`NULL`
+`null`
