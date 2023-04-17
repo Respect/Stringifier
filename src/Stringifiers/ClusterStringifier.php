@@ -15,6 +15,9 @@ use Respect\Stringifier\Stringifier;
 
 final class ClusterStringifier implements Stringifier
 {
+    private const MAXIMUM_DEPTH = 3;
+    private const MAXIMUM_NUMBER_OF_ITEMS = 5;
+
     /**
      * @var Stringifier[]
      */
@@ -40,7 +43,7 @@ final class ClusterStringifier implements Stringifier
             new StringableObjectStringifier($stringifier),
             new JsonSerializableStringifier($stringifier, $quoter),
             new ObjectStringifier($stringifier, $quoter),
-            new ArrayStringifier($stringifier, $quoter, 3, 5),
+            new ArrayStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_ITEMS),
             new InfiniteStringifier($quoter),
             new NanStringifier($quoter),
             new ResourceStringifier($quoter),

@@ -22,11 +22,13 @@ use function sprintf;
 
 final class ArrayStringifier implements Stringifier
 {
+    private const LIMIT_EXCEEDED_PLACEHOLDER = '...';
+
     public function __construct(
         private readonly Stringifier $stringifier,
         private readonly Quoter $quoter,
         private readonly int $maximumDepth,
-        private readonly int $itemsLimit
+        private readonly int $maximumNumberOfItems
     ) {
     }
 
@@ -37,30 +39,40 @@ final class ArrayStringifier implements Stringifier
         }
 
         if (empty($raw)) {
-            return $this->quoter->quote('{ }', $depth);
+            return $this->quoter->quote('[]', $depth);
         }
 
         if ($depth >= $this->maximumDepth) {
-            return '...';
+            return $this->quoter->quote(self::LIMIT_EXCEEDED_PLACEHOLDER, $depth);
         }
 
         $items = [];
-        $itemsCount = 0;
         $isSequential = $this->isSequential($raw);
         foreach ($raw as $key => $value) {
-            if (++$itemsCount > $this->itemsLimit) {
-                $items[$itemsCount] = '...';
+            if (count($items) >= $this->maximumNumberOfItems) {
+                $items[] = self::LIMIT_EXCEEDED_PLACEHOLDER;
                 break;
             }
 
-            $items[$itemsCount] = '';
-            if ($isSequential === false) {
-                $items[$itemsCount] .= sprintf('%s: ', $this->stringifier->stringify($key, $depth + 1));
+            $stringifiedValue = $this->stringifyKeyValue($value, $depth + 1);
+            if ($isSequential === true) {
+                $items[] = $stringifiedValue;
+                continue;
             }
-            $items[$itemsCount] .= $this->stringifier->stringify($value, $depth + 1);
+
+            $items[] = sprintf('%s: %s', $this->stringifier->stringify($key, $depth + 1), $stringifiedValue);
         }
 
-        return $this->quoter->quote(sprintf('{ %s }', implode(', ', $items)), $depth);
+        return $this->quoter->quote(sprintf('[%s]', implode(', ', $items)), $depth);
+    }
+
+    private function stringifyKeyValue(mixed $value, int $depth): ?string
+    {
+        if (is_array($value)) {
+            return $this->stringify($value, $depth);
+        }
+
+        return $this->stringifier->stringify($value, $depth);
     }
 
     /**

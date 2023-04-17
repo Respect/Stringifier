@@ -13,277 +13,253 @@ namespace Respect\Stringifier\Test\Unit\Stringifiers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Quoter;
-use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\ArrayStringifier;
+use Respect\Stringifier\Test\Double\FakeQuoter;
+use Respect\Stringifier\Test\Double\FakeStringifier;
 
-use function is_array;
+use function sprintf;
 
 #[CoversClass(ArrayStringifier::class)]
 final class ArrayStringifierTest extends TestCase
 {
     #[Test]
-    public function shouldNotConvertToStringWhenRawValueIsNotAnArray(): void
+    public function itShouldNotStringifyRawValueWhenItIsNotAnArray(): void
     {
-        $raw = false;
-        $depth = 0;
+        $sut = new ArrayStringifier(new FakeStringifier(), new FakeQuoter(), 3, 5);
 
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->never())
-            ->method('stringify');
-
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->never())
-            ->method('quote');
-
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
-
-        self::assertNull($arrayStringifier->stringify($raw, $depth));
+        self::assertNull($sut->stringify(false, 0));
     }
 
     #[Test]
-    public function shouldReturnPlaceHolderWhenDepthIsEqualsToMaximumDepth(): void
-    {
-        $raw = [1, 2, 3];
-        $depth = 42;
-        $maximumDepth = 42;
-
-        $expected = '...';
-
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->never())
-            ->method('stringify');
-
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->never())
-            ->method('quote');
-
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, $maximumDepth, 5);
-
-        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
-    }
-
-    #[Test]
-    public function shouldReturnPlaceHolderWhenDepthIsBiggerThanMaximumDepth(): void
-    {
-        $raw = [1, 2, 3];
-        $depth = 42;
-        $maximumDepth = 41;
-
-        $expected = '...';
-
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->never())
-            ->method('stringify');
-
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->never())
-            ->method('quote');
-
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, $maximumDepth, 5);
-
-        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
-    }
-
-    #[Test]
-    public function shouldReturnPlaceHolderWhenRawValueIsAnEmptyArray(): void
+    public function itShouldStringifyRawValueWhenItIsAnEmptyArray(): void
     {
         $raw = [];
         $depth = 0;
 
-        $expected = '{ }';
+        $quoter = new FakeQuoter();
 
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->never())
-            ->method('stringify');
+        $sut = new ArrayStringifier(new FakeStringifier(), $quoter, 3, 5);
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
+        $actual = $sut->stringify($raw, $depth);
+        $expected = $quoter->quote('[]', $depth);
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
-
-        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
+        self::assertSame($expected, $actual);
     }
 
     #[Test]
-    public function shouldReturnPlaceHolderWhenRawValueIsAnEmptyArrayEvenThenReachedTheMaximumDepth(): void
-    {
-        $raw = [];
-        $depth = 0;
-
-        $expected = '{ }';
-
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->never())
-            ->method('stringify');
-
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
-
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, $depth, 5);
-
-        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
-    }
-
-    #[Test]
-    public function shouldConvertToStringWhenRawValueIsAnArray(): void
+    public function itShouldStringifyRawValueWhenItIsAnNonAssociativeArray(): void
     {
         $raw = [1, 2, 3];
         $depth = 0;
 
-        $expected = '{ 1, 2, 3 }';
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
 
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->any())
-            ->method('stringify')
-            ->willReturnCallback(static function ($raw): string {
-                return (string) $raw;
-            });
+        $sut = new ArrayStringifier($stringifier, $quoter, 3, 5);
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
+        $actual = $sut->stringify($raw, $depth);
+        $expected = $quoter->quote(
+            sprintf(
+                '[%s, %s, %s]',
+                $stringifier->stringify($raw[0], $depth + 1),
+                $stringifier->stringify($raw[1], $depth + 1),
+                $stringifier->stringify($raw[2], $depth + 1)
+            ),
+            $depth
+        );
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
-
-        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
+        self::assertSame($expected, $actual);
     }
 
     #[Test]
-    public function shouldConvertToStringWhenRawValueIsNested(): void
-    {
-        $raw = [1, [2, 3], 4, 5, [6]];
-        $depth = 0;
-
-        $expected = '{ 1, nested, 4, 5, nested }';
-
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->any())
-            ->method('stringify')
-            ->willReturnCallback(static function ($raw): string {
-                if (is_array($raw)) {
-                    return 'nested';
-                }
-
-                return (string) $raw;
-            });
-
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
-
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
-
-        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
-    }
-
-    #[Test]
-    public function shouldConvertToStringWhenKeysAreNotSequential(): void
-    {
-        $raw = [1, 2, 3 => 3];
-        $depth = 0;
-
-        $expected = '{ 0: 1, 1: 2, 3: 3 }';
-
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->any())
-            ->method('stringify')
-            ->willReturnCallback(static function ($raw): string {
-                return (string) $raw;
-            });
-
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
-
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
-
-        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
-    }
-
-    #[Test]
-    public function shouldConvertToStringWhenKeysAreNotInteger(): void
+    public function itShouldStringifyRawValueWhenItIsAnAssociativeArray(): void
     {
         $raw = ['foo' => 1, 'bar' => 2];
         $depth = 0;
 
-        $expected = '{ foo: 1, bar: 2 }';
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
 
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->any())
-            ->method('stringify')
-            ->willReturnCallback(static function ($raw): string {
-                return (string) $raw;
-            });
+        $sut = new ArrayStringifier($stringifier, $quoter, 3, 5);
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
+        $actual = $sut->stringify($raw, $depth);
+        $expected = $quoter->quote(
+            sprintf(
+                '[%s: %s, %s: %s]',
+                $stringifier->stringify('foo', $depth + 1),
+                $stringifier->stringify($raw['foo'], $depth + 1),
+                $stringifier->stringify('bar', $depth + 1),
+                $stringifier->stringify($raw['bar'], $depth + 1),
+            ),
+            $depth
+        );
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 3, 5);
-
-        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
+        self::assertSame($expected, $actual);
     }
 
     #[Test]
-    public function shouldUsePlaceholderWhenLimitOfItemsIsReached(): void
+    public function itShouldStringifyRawValueWhenIsNotSequentialArray(): void
     {
-        $itemsLimit = 5;
-
-        $raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $raw = [1, 2 => 3];
         $depth = 0;
 
-        $expected = '{ 1, 2, 3, 4, 5, ... }';
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
 
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->any())
-            ->method('stringify')
-            ->willReturnCallback(static function ($raw): string {
-                return (string) $raw;
-            });
+        $sut = new ArrayStringifier($stringifier, $quoter, 3, 5);
+        $expected = $quoter->quote(
+            sprintf(
+                '[%s: %s, %s: %s]',
+                $stringifier->stringify(0, $depth + 1),
+                $stringifier->stringify(1, $depth + 1),
+                $stringifier->stringify(2, $depth + 1),
+                $stringifier->stringify(3, $depth + 1),
+            ),
+            $depth
+        );
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expected, $depth)
-            ->willReturn($expected);
+        self::assertSame($expected, $sut->stringify($raw, $depth));
+    }
 
-        $arrayStringifier = new ArrayStringifier($stringifierMock, $quoterMock, 1, $itemsLimit);
+    #[Test]
+    public function itShouldStringifyRawValueWhenItIsNestedArray(): void
+    {
+        $raw = ['a', ['b', 'c', ['d', 'e']]];
+        $depth = 0;
 
-        self::assertSame($expected, $arrayStringifier->stringify($raw, $depth));
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
+
+        $sut = new ArrayStringifier($stringifier, $quoter, 3, 5);
+
+        $actual = $sut->stringify($raw, $depth);
+        $expected = $quoter->quote(
+            sprintf(
+                '[%s, %s]',
+                $stringifier->stringify('a', $depth + 1),
+                $quoter->quote(
+                    sprintf(
+                        '[%s, %s, %s]',
+                        $stringifier->stringify('b', $depth + 2),
+                        $stringifier->stringify('c', $depth + 2),
+                        $quoter->quote(
+                            sprintf(
+                                '[%s, %s]',
+                                $stringifier->stringify('d', $depth + 3),
+                                $stringifier->stringify('e', $depth + 3),
+                            ),
+                            $depth + 2
+                        )
+                    ),
+                    $depth + 1
+                ),
+            ),
+            $depth
+        );
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWithPlaceholderWhenDepthEqualsTheMaximumDepth(): void
+    {
+        $raw = [1, 2, 3];
+        $depth = 42;
+
+        $maximumDepth = $depth;
+
+        $quoter = new FakeQuoter();
+
+        $sut = new ArrayStringifier(new FakeStringifier(), $quoter, $maximumDepth, 5);
+
+        $actual = $sut->stringify($raw, $depth);
+        $expected = $quoter->quote('...', $depth);
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWithPlaceholderWhenDepthIsBiggerThanMaximumDepth(): void
+    {
+        $raw = [1, 2, 3];
+        $depth = 42;
+
+        $maximumDepth = $depth - 1;
+
+        $quoter = new FakeQuoter();
+
+        $sut = new ArrayStringifier(new FakeStringifier(), $quoter, $maximumDepth, 5);
+
+        $actual = $sut->stringify($raw, $depth);
+        $expected = $quoter->quote('...', $depth);
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWithPlaceholderWhenItReachesTheMaximumDepth(): void
+    {
+        $raw = ['a', ['b', ['c', ['d', ['e', 'f']]]]];
+        $depth = 0;
+
+        $maximumDepth = 3;
+
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
+
+        $sut = new ArrayStringifier($stringifier, $quoter, $maximumDepth, 5);
+
+        $actual = $sut->stringify($raw, $depth);
+        $expected = $quoter->quote(
+            sprintf(
+                '[%s, %s]',
+                $stringifier->stringify('a', $depth + 1),
+                $quoter->quote(
+                    sprintf(
+                        '[%s, %s]',
+                        $stringifier->stringify('b', $depth + 2),
+                        $quoter->quote(
+                            sprintf(
+                                '[%s, %s]',
+                                $stringifier->stringify('c', $depth + 3),
+                                $quoter->quote('...', $depth + 3),
+                            ),
+                            $depth + 2
+                        )
+                    ),
+                    $depth + 1
+                ),
+            ),
+            $depth
+        );
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWithPlaceholderWhenLimitOfItemsIsReached(): void
+    {
+        $itemsLimit = 3;
+
+        $raw = [1, 2, 3, 4, 5, 6];
+        $depth = 0;
+
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
+
+        $sut = new ArrayStringifier($stringifier, $quoter, 1, $itemsLimit);
+
+        $expected = $quoter->quote(
+            sprintf(
+                '[%s, %s, %s, ...]',
+                $stringifier->stringify(1, $depth + 1),
+                $stringifier->stringify(2, $depth + 1),
+                $stringifier->stringify(3, $depth + 1),
+            ),
+            $depth
+        );
+        $actual = $sut->stringify($raw, $depth);
+
+        self::assertSame($expected, $actual);
     }
 }

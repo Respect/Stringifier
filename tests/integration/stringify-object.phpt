@@ -8,4 +8,4 @@ require 'vendor/autoload.php';
 output(new Respect\Stringifier\Test\MyObject());
 ?>
 --EXPECT--
-`[object] (Respect\Stringifier\Test\MyObject: { "foo": TRUE })`
+`[object] (Respect\Stringifier\Test\MyObject: ["foo": TRUE])`
