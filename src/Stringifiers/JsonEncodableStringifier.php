@@ -18,7 +18,7 @@ use const JSON_PRESERVE_ZERO_FRACTION;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 
-final class JsonParsableStringifier implements Stringifier
+final class JsonEncodableStringifier implements Stringifier
 {
     public function stringify(mixed $raw, int $depth): ?string
     {

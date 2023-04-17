@@ -38,14 +38,14 @@ final class ClusterStringifier implements Stringifier
 
         $stringifier = new self();
 
-        $jsonParsableStringifier = new JsonParsableStringifier();
+        $jsonEncodableStringifier = new JsonEncodableStringifier();
 
         $stringifier->setStringifiers([
             new IteratorObjectStringifier($stringifier, $quoter),
             new DateTimeStringifier($quoter, DateTimeInterface::ATOM),
             new ThrowableStringifier($stringifier, $quoter),
-            new StringableObjectStringifier($jsonParsableStringifier, $quoter),
-            new JsonSerializableObjectStringifier($jsonParsableStringifier, $quoter),
+            new StringableObjectStringifier($jsonEncodableStringifier, $quoter),
+            new JsonSerializableObjectStringifier($jsonEncodableStringifier, $quoter),
             new ObjectStringifier($stringifier, $quoter),
             new ArrayStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_ITEMS),
             new InfiniteNumberStringifier($quoter),
@@ -53,7 +53,7 @@ final class ClusterStringifier implements Stringifier
             new ResourceStringifier($quoter),
             new BoolStringifier($quoter),
             new NullStringifier($quoter),
-            $jsonParsableStringifier,
+            $jsonEncodableStringifier,
         ]);
 
         return $stringifier;
