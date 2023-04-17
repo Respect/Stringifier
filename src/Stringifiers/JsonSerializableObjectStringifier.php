@@ -16,7 +16,7 @@ use Respect\Stringifier\Stringifier;
 
 use function sprintf;
 
-final class JsonSerializableStringifier implements Stringifier
+final class JsonSerializableObjectStringifier implements Stringifier
 {
     public function __construct(
         private readonly Stringifier $stringifier,
@@ -32,7 +32,7 @@ final class JsonSerializableStringifier implements Stringifier
 
         return $this->quoter->quote(
             sprintf(
-                '[json-serializable] (%s: %s)',
+                '%s { jsonSerialize() => %s }',
                 $raw::class,
                 $this->stringifier->stringify($raw->jsonSerialize(), $depth + 1)
             ),

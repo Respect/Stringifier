@@ -8,16 +8,12 @@
 
 declare(strict_types=1);
 
-namespace Respect\Stringifier\Test;
-
-use JsonSerializable;
-
-final class MyJsonSerializable implements JsonSerializable
+final class ConcreteJsonSerializable implements JsonSerializable
 {
-    public const JSON_VALUE = [1, 2, 3];
+    public const JSON_VALUE = [1, 2, 3, 'foo' => true];
 
     /**
-     * @return int[]
+     * @return array<mixed, mixed>
      */
     public function jsonSerialize(): array
     {

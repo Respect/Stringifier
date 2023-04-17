@@ -33,6 +33,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "": "tests/fixtures/",
             "Respect\\Stringifier\\Test\\": "tests/src/",
             "Respect\\Stringifier\\Test\\Unit\\": "tests/unit"
         },

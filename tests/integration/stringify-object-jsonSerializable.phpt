@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-output(new Respect\Stringifier\Test\MyJsonSerializable());
+output(new ConcreteJsonSerializable());
 ?>
 --EXPECT--
-`[json-serializable] (Respect\Stringifier\Test\MyJsonSerializable: [1, 2, 3])`
+`ConcreteJsonSerializable { jsonSerialize() => {"0":1,"1":2,"2":3,"foo":true} }`
