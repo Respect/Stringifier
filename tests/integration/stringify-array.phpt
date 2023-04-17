@@ -5,9 +5,7 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use function Respect\Stringifier\stringify;
-
-echo stringify([
+output([
     1,
     null,
     [

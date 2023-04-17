@@ -25,12 +25,19 @@
     },
     "autoload": {
         "psr-4": {
-            "Respect\\Stringifier\\": "src/",
+            "Respect\\Stringifier\\": "src/"
+        },
+        "files": [
+            "src/stringify.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Respect\\Stringifier\\Test\\": "tests/src/",
             "Respect\\Stringifier\\Test\\Unit\\": "tests/unit"
         },
         "files": [
-            "src/stringify.php"
+            "tests/integration/lib/helpers.php"
         ]
     },
     "scripts": {

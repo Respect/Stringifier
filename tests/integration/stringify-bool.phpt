@@ -5,14 +5,9 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use function Respect\Stringifier\stringify;
-
-echo implode(
-    PHP_EOL,
-    [
-        stringify(true),
-        stringify(false),
-    ]
+outputMultiple(
+    true,
+    false,
 );
 ?>
 --EXPECT--
