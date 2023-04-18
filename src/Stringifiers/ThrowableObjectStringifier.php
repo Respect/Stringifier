@@ -18,7 +18,7 @@ use function getcwd;
 use function sprintf;
 use function str_replace;
 
-final class ThrowableStringifier implements Stringifier
+final class ThrowableObjectStringifier implements Stringifier
 {
     public function __construct(
         private readonly Stringifier $stringifier,
@@ -32,29 +32,26 @@ final class ThrowableStringifier implements Stringifier
             return null;
         }
 
+        if ($raw->getMessage() === '') {
+            return $this->quoter->quote(
+                sprintf('%s { in %s }', $raw::class, $this->getSource($raw)),
+                $depth
+            );
+        }
+
         return $this->quoter->quote(
             sprintf(
-                '[throwable] (%s: %s)',
+                '%s { %s in %s }',
                 $raw::class,
-                $this->stringifier->stringify($this->getData($raw), $depth + 1)
+                $this->stringifier->stringify($raw->getMessage(), $depth + 1),
+                $this->getSource($raw),
             ),
             $depth
         );
     }
 
-    /**
-     * @return mixed[]
-     */
-    private function getData(Throwable $throwable): array
+    private function getSource(Throwable $throwable): string
     {
-        return [
-            'message' => $throwable->getMessage(),
-            'code' => $throwable->getCode(),
-            'file' => sprintf(
-                '%s:%d',
-                str_replace(getcwd() . '/', '', $throwable->getFile()),
-                $throwable->getLine()
-            ),
-        ];
+        return str_replace(getcwd() . '/', '', $throwable->getFile()) . ':' . $throwable->getLine();
     }
 }
