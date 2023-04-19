@@ -18,6 +18,7 @@ final class ClusterStringifier implements Stringifier
 {
     private const MAXIMUM_DEPTH = 3;
     private const MAXIMUM_NUMBER_OF_ITEMS = 5;
+    private const MAXIMUM_NUMBER_OF_PROPERTIES = self::MAXIMUM_NUMBER_OF_ITEMS;
 
     /**
      * @var Stringifier[]
@@ -46,7 +47,7 @@ final class ClusterStringifier implements Stringifier
             new ThrowableObjectStringifier($jsonEncodableStringifier, $quoter),
             new StringableObjectStringifier($jsonEncodableStringifier, $quoter),
             new JsonSerializableObjectStringifier($jsonEncodableStringifier, $quoter),
-            new ObjectStringifier($stringifier, $quoter),
+            new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_PROPERTIES),
             new ArrayStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_ITEMS),
             new InfiniteNumberStringifier($quoter),
             new NotANumberStringifier($quoter),

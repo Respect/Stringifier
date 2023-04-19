@@ -5,7 +5,13 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-output(new Respect\Stringifier\Test\MyObject());
+outputMultiple(
+    new stdClass(),
+    new WithProperties(),
+    new WithUninitializedProperties(),
+);
 ?>
 --EXPECT--
-`[object] (Respect\Stringifier\Test\MyObject: ["foo": true])`
+`stdClass {}`
+`WithProperties { +$publicProperty=true #$protectedProperty=42 -$privateProperty="something" }`
+`WithUninitializedProperties { +$uninitializedProperty=*uninitialized* }`

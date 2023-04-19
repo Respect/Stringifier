@@ -25,4 +25,4 @@ output([
 ]);
 ?>
 --EXPECT--
-`[1, null, [1.0, [resource <stream>, ..., []]], false, [object] (stdClass: []), ...]`
+`[1, null, [1.0, [resource <stream>, ..., []]], false, stdClass {}, ...]`

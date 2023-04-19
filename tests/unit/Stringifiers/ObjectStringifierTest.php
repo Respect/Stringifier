@@ -13,62 +13,211 @@ namespace Respect\Stringifier\Test\Unit\Stringifiers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Quoter;
-use Respect\Stringifier\Stringifier;
+use ReflectionObject;
 use Respect\Stringifier\Stringifiers\ObjectStringifier;
+use Respect\Stringifier\Test\Double\FakeQuoter;
+use Respect\Stringifier\Test\Double\FakeStringifier;
+use stdClass;
+use WithProperties;
+use WithUninitializedProperties;
+
+use function sprintf;
 
 #[CoversClass(ObjectStringifier::class)]
 final class ObjectStringifierTest extends TestCase
 {
+    private const DEPTH = 0;
+    private const MAXIMUM_DEPTH = 4;
+    private const MAXIMUM_NUMBER_OF_PROPERTIES = 5;
+
     #[Test]
-    public function shouldConvertToStringWhenRawValueIsAnObject(): void
+    public function itShouldNotStringifyRawValueWhenItIsNotAnObject(): void
     {
-        $data = ['foo' => 1, 'bar' => false];
+        $sut = new ObjectStringifier(
+            new FakeStringifier(),
+            new FakeQuoter(),
+            self::MAXIMUM_DEPTH,
+            self::MAXIMUM_NUMBER_OF_PROPERTIES
+        );
 
-        $raw = (object) $data;
-        $depth = 0;
-
-        $stringifiedData = '-stringified-';
-
-        $expectedValue = '[object] (stdClass: ' . $stringifiedData . ')';
-
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->once())
-            ->method('stringify')
-            ->with($data, $depth + 1)
-            ->willReturn($stringifiedData);
-
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->once())
-            ->method('quote')
-            ->with($expectedValue, $depth)
-            ->willReturn($expectedValue);
-
-        $objectStringifier = new ObjectStringifier($stringifierMock, $quoterMock);
-
-        self::assertSame($expectedValue, $objectStringifier->stringify($raw, $depth));
+        self::assertNull($sut->stringify(true, self::DEPTH));
     }
 
     #[Test]
-    public function shouldNotConvertToStringWhenRawValueIsNotTraversable(): void
+    public function itShouldStringifyRawValueWhenItIsAnObjectWithoutProperties(): void
     {
-        $raw = true;
-        $depth = 123;
+        $raw = new stdClass();
 
-        $stringifierMock = $this->createMock(Stringifier::class);
-        $stringifierMock
-            ->expects($this->never())
-            ->method('stringify');
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
 
-        $quoterMock = $this->createMock(Quoter::class);
-        $quoterMock
-            ->expects($this->never())
-            ->method('quote');
+        $sut = new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_PROPERTIES);
 
-        $objectStringifier = new ObjectStringifier($stringifierMock, $quoterMock);
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote('stdClass {}', self::DEPTH);
 
-        self::assertNull($objectStringifier->stringify($raw, $depth));
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWhenItIsAnObjectWithProperties(): void
+    {
+        $raw = new WithProperties();
+
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
+
+        $sut = new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_PROPERTIES);
+
+        $relection = new ReflectionObject($raw);
+
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote(
+            sprintf(
+                '%s { +$publicProperty=%s #$protectedProperty=%s -$privateProperty=%s }',
+                $relection->getName(),
+                $stringifier->stringify($relection->getProperty('publicProperty')->getValue($raw), self::DEPTH + 1),
+                $stringifier->stringify($relection->getProperty('protectedProperty')->getValue($raw), self::DEPTH + 1),
+                $stringifier->stringify($relection->getProperty('privateProperty')->getValue($raw), self::DEPTH + 1),
+            ),
+            self::DEPTH
+        );
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWhenItIsAnObjectWithUninitializedProperties(): void
+    {
+        $raw = new WithUninitializedProperties();
+
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
+
+        $sut = new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_PROPERTIES);
+
+        $relection = new ReflectionObject($raw);
+
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote(
+            sprintf(
+                '%s { +$uninitializedProperty=%s }',
+                $relection->getName(),
+                '*uninitialized*',
+            ),
+            self::DEPTH
+        );
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWhenItIsAnObjectWithPropertiesThatAreObjects(): void
+    {
+        $raw = new stdClass();
+        $raw->a = 1;
+        $raw->b = new stdClass();
+        $raw->b->c = true;
+        $raw->b->d = new stdClass();
+        $raw->b->d->e = [];
+        $raw->b->d->f = new stdClass();
+
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
+
+        $sut = new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_PROPERTIES);
+
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote(
+            sprintf(
+                'stdClass { +$a=%s +$b=%s }',
+                $stringifier->stringify($raw->a, self::DEPTH + 1),
+                $quoter->quote(
+                    sprintf(
+                        'stdClass { +$c=%s +$d=%s }',
+                        $stringifier->stringify($raw->b->c, self::DEPTH + 2),
+                        $quoter->quote(
+                            sprintf(
+                                'stdClass { +$e=%s +$f=%s }',
+                                $stringifier->stringify($raw->b->d->e, self::DEPTH + 3),
+                                $quoter->quote('stdClass {}', self::DEPTH + 3)
+                            ),
+                            self::DEPTH + 2
+                        )
+                    ),
+                    self::DEPTH + 1
+                )
+            ),
+            self::DEPTH
+        );
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWithPlaceholderWhenItReachesTheMaximumDepth(): void
+    {
+        $raw = new stdClass();
+        $raw->property = $raw;
+
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
+
+        $maximumDepth = self::DEPTH + 3;
+
+        $sut = new ObjectStringifier($stringifier, $quoter, $maximumDepth, self::MAXIMUM_NUMBER_OF_PROPERTIES);
+
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote(
+            sprintf(
+                'stdClass { +$property=%s }',
+                $quoter->quote(
+                    sprintf(
+                        'stdClass { +$property=%s }',
+                        $quoter->quote(
+                            sprintf(
+                                'stdClass { +$property=%s }',
+                                $quoter->quote('stdClass { ... }', $maximumDepth)
+                            ),
+                            self::DEPTH + 2
+                        )
+                    ),
+                    self::DEPTH + 1
+                )
+            ),
+            self::DEPTH
+        );
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWithPlaceholderWhenItReachesLimitOfItems(): void
+    {
+        $raw = new stdClass();
+        $raw->a = 1;
+        $raw->b = 2;
+        $raw->c = 3;
+        $raw->d = 4;
+
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
+
+        $itemsLimit = 3;
+
+        $sut = new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, $itemsLimit);
+
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote(
+            sprintf(
+                'stdClass { +$a=%s +$b=%s +$c=%s ... }',
+                $stringifier->stringify($raw->a, self::DEPTH + 1),
+                $stringifier->stringify($raw->b, self::DEPTH + 1),
+                $stringifier->stringify($raw->c, self::DEPTH + 1),
+            ),
+            self::DEPTH
+        );
+
+        self::assertSame($expected, $actual);
     }
 }
