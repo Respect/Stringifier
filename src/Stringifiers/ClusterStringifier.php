@@ -55,6 +55,7 @@ final class ClusterStringifier implements Stringifier
             new JsonSerializableObjectStringifier($jsonEncodableStringifier, $quoter),
             new EnumerationStringifier($quoter),
             new ObjectWithDebugInfoStringifier($arrayStringifier, $quoter),
+            new CallableStringifier($stringifier, $quoter),
             new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_PROPERTIES),
             $arrayStringifier,
             new InfiniteNumberStringifier($quoter),
