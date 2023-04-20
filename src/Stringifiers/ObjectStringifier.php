@@ -12,17 +12,19 @@ namespace Respect\Stringifier\Stringifiers;
 
 use ReflectionObject;
 use ReflectionProperty;
+use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 
 use function count;
-use function implode;
 use function is_object;
 use function sprintf;
 use function trim;
 
 final class ObjectStringifier implements Stringifier
 {
+    use ObjectHelper;
+
     private const LIMIT_EXCEEDED_PLACEHOLDER = '...';
 
     public function __construct(
@@ -40,15 +42,13 @@ final class ObjectStringifier implements Stringifier
         }
 
         if ($depth >= $this->maximumDepth) {
-            return $this->quoter->quote(sprintf('%s { %s }', $raw::class, self::LIMIT_EXCEEDED_PLACEHOLDER), $depth);
+            return $this->quoter->quote($this->format($raw, self::LIMIT_EXCEEDED_PLACEHOLDER), $depth);
         }
 
-        $properties = $this->getProperties(new ReflectionObject($raw), $raw, $depth + 1);
-        if (count($properties) === 0) {
-            return $this->quoter->quote(sprintf('%s {}', $raw::class), $depth);
-        }
-
-        return $this->quoter->quote(sprintf('%s { %s }', $raw::class, implode(' ', $properties)), $depth);
+        return $this->quoter->quote(
+            $this->format($raw, ...$this->getProperties(new ReflectionObject($raw), $raw, $depth + 1)),
+            $depth
+        );
     }
 
     /**

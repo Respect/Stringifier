@@ -17,6 +17,7 @@ use ReflectionObject;
 use Respect\Stringifier\Stringifiers\ObjectStringifier;
 use Respect\Stringifier\Test\Double\FakeQuoter;
 use Respect\Stringifier\Test\Double\FakeStringifier;
+use SplStack;
 use stdClass;
 use WithProperties;
 use WithUninitializedProperties;
@@ -217,6 +218,51 @@ final class ObjectStringifierTest extends TestCase
             ),
             self::DEPTH
         );
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWhenItIsAnAnonymousClass(): void
+    {
+        $raw = new class {
+            public int $foo = 1;
+        };
+
+        $stringifier = new FakeStringifier();
+        $quoter = new FakeQuoter();
+
+        $sut = new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_PROPERTIES);
+
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote(
+            sprintf(
+                'class { +$foo=%s }',
+                $stringifier->stringify($raw->foo, self::DEPTH + 1)
+            ),
+            self::DEPTH
+        );
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function itShouldStringifyRawValueWhenItIsAnAnonymousClassExtendingAnotherClass(): void
+    {
+        $raw = new class extends SplStack {
+        };
+
+        $quoter = new FakeQuoter();
+
+        $sut = new ObjectStringifier(
+            new FakeStringifier(),
+            $quoter,
+            self::MAXIMUM_DEPTH,
+            self::MAXIMUM_NUMBER_OF_PROPERTIES
+        );
+
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote('SplStack@anonymous {}', self::DEPTH);
 
         self::assertSame($expected, $actual);
     }

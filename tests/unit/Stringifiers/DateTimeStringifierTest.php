@@ -17,9 +17,11 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Stringifiers\DateTimeStringifier;
 use Respect\Stringifier\Test\Double\FakeQuoter;
 
+#[CoversClass(ObjectHelper::class)]
 #[CoversClass(DateTimeStringifier::class)]
 final class DateTimeStringifierTest extends TestCase
 {

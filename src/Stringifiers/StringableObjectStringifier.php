@@ -10,14 +10,15 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Stringable;
 
-use function sprintf;
-
 final class StringableObjectStringifier implements Stringifier
 {
+    use ObjectHelper;
+
     public function __construct(
         private readonly Stringifier $stringifier,
         private readonly Quoter $quoter
@@ -31,11 +32,7 @@ final class StringableObjectStringifier implements Stringifier
         }
 
         return $this->quoter->quote(
-            sprintf(
-                '%s { __toString() => %s }',
-                $raw::class,
-                $this->stringifier->stringify($raw->__toString(), $depth + 1)
-            ),
+            $this->format($raw, '__toString() =>', $this->stringifier->stringify($raw->__toString(), $depth + 1)),
             $depth
         );
     }

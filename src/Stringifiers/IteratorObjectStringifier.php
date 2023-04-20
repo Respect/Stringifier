@@ -11,13 +11,14 @@ declare(strict_types=1);
 namespace Respect\Stringifier\Stringifiers;
 
 use Iterator;
+use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 
-use function sprintf;
-
 final class IteratorObjectStringifier implements Stringifier
 {
+    use ObjectHelper;
+
     public function __construct(
         private readonly Stringifier $stringifier,
         private readonly Quoter $quoter
@@ -31,11 +32,7 @@ final class IteratorObjectStringifier implements Stringifier
         }
 
         return $this->quoter->quote(
-            sprintf(
-                '%s { current() => %s }',
-                $raw::class,
-                $this->stringifier->stringify($raw->current(), $depth + 1)
-            ),
+            $this->format($raw, 'current() =>', $this->stringifier->stringify($raw->current(), $depth + 1)),
             $depth
         );
     }

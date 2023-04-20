@@ -19,6 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Stringifiers\ThrowableObjectStringifier;
 use Respect\Stringifier\Test\Double\FakeQuoter;
 use Respect\Stringifier\Test\Double\FakeStringifier;
@@ -29,6 +30,7 @@ use TypeError;
 
 use function sprintf;
 
+#[CoversClass(ObjectHelper::class)]
 #[CoversClass(ThrowableObjectStringifier::class)]
 final class ThrowableObjectStringifierTest extends TestCase
 {

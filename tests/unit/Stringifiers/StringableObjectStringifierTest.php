@@ -14,6 +14,7 @@ use ConcreteStringable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Stringifiers\StringableObjectStringifier;
 use Respect\Stringifier\Test\Double\FakeQuoter;
 use Respect\Stringifier\Test\Double\FakeStringifier;
@@ -21,6 +22,7 @@ use stdClass;
 
 use function sprintf;
 
+#[CoversClass(ObjectHelper::class)]
 #[CoversClass(StringableObjectStringifier::class)]
 final class StringableObjectStringifierTest extends TestCase
 {

@@ -11,13 +11,14 @@ declare(strict_types=1);
 namespace Respect\Stringifier\Stringifiers;
 
 use DateTimeInterface;
+use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 
-use function sprintf;
-
 final class DateTimeStringifier implements Stringifier
 {
+    use ObjectHelper;
+
     public function __construct(
         private readonly Quoter $quoter,
         private readonly string $format
@@ -30,6 +31,6 @@ final class DateTimeStringifier implements Stringifier
             return null;
         }
 
-        return $this->quoter->quote(sprintf('%s { %s }', $raw::class, $raw->format($this->format)), $depth);
+        return $this->quoter->quote($this->format($raw, $raw->format($this->format)), $depth);
     }
 }

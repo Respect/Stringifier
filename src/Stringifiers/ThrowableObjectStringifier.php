@@ -10,16 +10,18 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Stringifiers;
 
+use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Stringifier;
 use Throwable;
 
 use function getcwd;
-use function sprintf;
 use function str_replace;
 
 final class ThrowableObjectStringifier implements Stringifier
 {
+    use ObjectHelper;
+
     public function __construct(
         private readonly Stringifier $stringifier,
         private readonly Quoter $quoter
@@ -33,18 +35,15 @@ final class ThrowableObjectStringifier implements Stringifier
         }
 
         if ($raw->getMessage() === '') {
-            return $this->quoter->quote(
-                sprintf('%s { in %s }', $raw::class, $this->getSource($raw)),
-                $depth
-            );
+            return $this->quoter->quote($this->format($raw, 'in', $this->getSource($raw)), $depth);
         }
 
         return $this->quoter->quote(
-            sprintf(
-                '%s { %s in %s }',
-                $raw::class,
+            $this->format(
+                $raw,
                 $this->stringifier->stringify($raw->getMessage(), $depth + 1),
-                $this->getSource($raw),
+                'in',
+                $this->getSource($raw)
             ),
             $depth
         );
