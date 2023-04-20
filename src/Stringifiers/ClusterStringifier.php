@@ -40,6 +40,12 @@ final class ClusterStringifier implements Stringifier
         $stringifier = new self();
 
         $jsonEncodableStringifier = new JsonEncodableStringifier();
+        $arrayStringifier = new ArrayStringifier(
+            $stringifier,
+            $quoter,
+            self::MAXIMUM_DEPTH,
+            self::MAXIMUM_NUMBER_OF_ITEMS
+        );
 
         $stringifier->setStringifiers([
             new IteratorObjectStringifier($stringifier, $quoter),
@@ -47,8 +53,9 @@ final class ClusterStringifier implements Stringifier
             new ThrowableObjectStringifier($jsonEncodableStringifier, $quoter),
             new StringableObjectStringifier($jsonEncodableStringifier, $quoter),
             new JsonSerializableObjectStringifier($jsonEncodableStringifier, $quoter),
+            new ObjectWithDebugInfoStringifier($arrayStringifier, $quoter),
             new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_PROPERTIES),
-            new ArrayStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_ITEMS),
+            $arrayStringifier,
             new InfiniteNumberStringifier($quoter),
             new NotANumberStringifier($quoter),
             new ResourceStringifier($quoter),
