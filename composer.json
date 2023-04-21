@@ -28,7 +28,7 @@
             "Respect\\Stringifier\\": "src/"
         },
         "files": [
-            "src/stringify.php"
+            "stringify.php"
         ]
     },
     "autoload-dev": {

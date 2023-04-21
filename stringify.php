@@ -10,15 +10,13 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier;
 
-use Respect\Stringifier\Stringifiers\ClusterStringifier;
-
 function stringify(mixed $value): string
 {
-    static $stringifier;
+    static $stringify;
 
-    if ($stringifier === null) {
-        $stringifier = ClusterStringifier::createDefault();
+    if ($stringify === null) {
+        $stringify = Stringify::createDefault();
     }
 
-    return $stringifier->stringify($value, 0) ?? '#ERROR#';
+    return $stringify->value($value);
 }
