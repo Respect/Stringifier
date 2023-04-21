@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Respect\Stringifier\Stringifiers;
 
 use DateTimeInterface;
-use Respect\Stringifier\Quoters\CodeQuoter;
+use Respect\Stringifier\Quoters\StandardQuoter;
 use Respect\Stringifier\Stringifier;
 
 use function array_unshift;
@@ -21,6 +21,7 @@ final class CompositeStringifier implements Stringifier
     private const MAXIMUM_DEPTH = 3;
     private const MAXIMUM_NUMBER_OF_ITEMS = 5;
     private const MAXIMUM_NUMBER_OF_PROPERTIES = self::MAXIMUM_NUMBER_OF_ITEMS;
+    private const MAXIMUM_LENGTH = 120;
 
     /**
      * @var Stringifier[]
@@ -34,7 +35,7 @@ final class CompositeStringifier implements Stringifier
 
     public static function createDefault(): self
     {
-        $quoter = new CodeQuoter();
+        $quoter = new StandardQuoter(self::MAXIMUM_LENGTH);
 
         $stringifier = new self(
             new InfiniteNumberStringifier($quoter),
