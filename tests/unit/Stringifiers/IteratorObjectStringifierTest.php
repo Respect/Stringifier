@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier\Test\Unit\Stringifiers;
 
+use ArrayIterator;
 use ConcreteIterator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -33,6 +34,14 @@ final class IteratorObjectStringifierTest extends TestCase
         $sut = new IteratorObjectStringifier(new FakeStringifier(), new FakeQuoter());
 
         self::assertNull($sut->stringify([1, 2, 3, 4], self::DEPTH));
+    }
+
+    #[Test]
+    public function itShouldNotStringifyRawValueWhenItIsIterableThatIsNotValid(): void
+    {
+        $sut = new IteratorObjectStringifier(new FakeStringifier(), new FakeQuoter());
+
+        self::assertNull($sut->stringify(new ArrayIterator([]), self::DEPTH));
     }
 
     #[Test]

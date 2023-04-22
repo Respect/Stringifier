@@ -31,6 +31,10 @@ final class IteratorObjectStringifier implements Stringifier
             return null;
         }
 
+        if (!$raw->valid()) {
+            return null;
+        }
+
         return $this->quoter->quote(
             $this->format($raw, 'current() =>', $this->stringifier->stringify($raw->current(), $depth + 1)),
             $depth
