@@ -25,6 +25,9 @@ use Respect\Stringifier\Test\Double\FakeStringifier;
 use function array_sum;
 use function sprintf;
 
+use const PHP_MAJOR_VERSION;
+use const PHP_MINOR_VERSION;
+
 #[CoversClass(ObjectHelper::class)]
 #[CoversClass(CallableStringifier::class)]
 final class CallableStringifierTest extends TestCase
@@ -72,6 +75,28 @@ final class CallableStringifierTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
+    #[Test]
+    public function itShouldStringifyWhenRawValueIsCallableThatDoesNotHaveAnAccessibleDefaultValue(): void
+    {
+        if ([8, 1] !== [PHP_MAJOR_VERSION, PHP_MINOR_VERSION]) {
+            self::markTestSkipped('This test is not applicable to PHP 8.1+');
+        }
+
+        $raw = 'array_walk';
+
+        $quoter = new FakeQuoter();
+
+        $sut = new CallableStringifier(new FakeStringifier(), $quoter);
+
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote(
+            'array_walk(object|array &$array, callable $callback, ?mixed $arg = fake.1.cbade92e): bool',
+            self::DEPTH
+        );
+
+        self::assertEquals($expected, $actual);
+    }
+
     /**
      * @return array<int, array{0: callable, 1: string}>
      */
@@ -84,6 +109,7 @@ final class CallableStringifierTest extends TestCase
             [static fn() => 1, 'function ()'],
             [static fn(): int => 1, 'function (): int'],
             [static fn(float $value): int => (int) $value, 'function (float $value): int'],
+            [static fn(float &$value): int => (int) $value, 'function (float &$value): int'],
             [static fn(?float $value): int => (int) $value, 'function (?float $value): int'],
             [static fn(int $value = self::DEPTH): int => $value, 'function (int $value = self::DEPTH): int'],
             [static fn(int|float $value): int => (int) $value, 'function (int|float $value): int'],

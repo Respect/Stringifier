@@ -151,7 +151,8 @@ final class CallableStringifier implements Stringifier
             return $parameter . ' ...$' . $reflectionParameter->getName();
         }
 
-        $parameter .= ' $' . $reflectionParameter->getName();
+        $parameter .= $reflectionParameter->isPassedByReference() ? ' &' : ' ';
+        $parameter .= '$' . $reflectionParameter->getName();
         if ($reflectionParameter->isOptional()) {
             $parameter  .= ' = ' . $this->buildValue($reflectionParameter, $depth);
         }
@@ -161,9 +162,12 @@ final class CallableStringifier implements Stringifier
 
     private function buildValue(ReflectionParameter $reflectionParameter, int $depth): ?string
     {
-        $value = $reflectionParameter->getDefaultValueConstantName();
-        if ($value !== null) {
-            return $value;
+        if (!$reflectionParameter->isDefaultValueAvailable()) {
+            return $this->stringifier->stringify(null, $depth);
+        }
+
+        if ($reflectionParameter->isDefaultValueConstant()) {
+            return $reflectionParameter->getDefaultValueConstantName();
         }
 
         return $this->stringifier->stringify($reflectionParameter->getDefaultValue(), $depth);
