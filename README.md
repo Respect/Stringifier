@@ -145,6 +145,9 @@ echo stringify(new ConcreteJsonSerializable()) . PHP_EOL;
 echo stringify(new WithDebugInfo()) . PHP_EOL;
 // `WithDebugInfo { __debugInfo() => ["info": "This is the return of __debugInfo()"] }`
 
+echo stringify(new ArrayObject([1, 2, 3])) . PHP_EOL;
+// `ArrayObject { getArrayCopy() => [1, 2, 3] }`
+
 echo stringify(new RuntimeException()) . PHP_EOL;
 // `RuntimeException { in file.php:119 }`
 

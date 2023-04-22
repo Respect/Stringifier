@@ -65,6 +65,7 @@ final class CompositeStringifier implements Stringifier
         $stringifier->prependStringifier(new FiberObjectStringifier($callableStringifier, $quoter));
         $stringifier->prependStringifier(new EnumerationStringifier($quoter));
         $stringifier->prependStringifier(new ObjectWithDebugInfoStringifier($arrayStringifier, $quoter));
+        $stringifier->prependStringifier(new ArrayObjectStringifier($arrayStringifier, $quoter));
         $stringifier->prependStringifier(new JsonSerializableObjectStringifier($jsonEncodableStringifier, $quoter));
         $stringifier->prependStringifier(new StringableObjectStringifier($jsonEncodableStringifier, $quoter));
         $stringifier->prependStringifier(new ThrowableObjectStringifier($jsonEncodableStringifier, $quoter));
