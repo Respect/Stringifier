@@ -43,6 +43,7 @@ final class CompositeStringifier implements Stringifier
             new ResourceStringifier($quoter),
             new BoolStringifier($quoter),
             new NullStringifier($quoter),
+            new DeclaredStringifier($quoter),
             $jsonEncodableStringifier = new JsonEncodableStringifier(),
         );
         $stringifier->prependStringifier(

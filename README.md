@@ -153,6 +153,9 @@ echo stringify(new RuntimeException()) . PHP_EOL;
 
 echo stringify(new InvalidArgumentException('This is the exception message')) . PHP_EOL;
 // `InvalidArgumentException { "This is the exception message" in file.php:112 }`
+
+echo stringify(Traversable::class) . PHP_EOL;
+// `Traversable`
 ```
 
 To see more examples of how to use the library check the [integration tests](tests/integration).
