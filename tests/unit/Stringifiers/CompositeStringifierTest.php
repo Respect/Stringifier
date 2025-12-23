@@ -21,7 +21,7 @@ use stdClass;
 #[CoversClass(CompositeStringifier::class)]
 final class CompositeStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenThereAreNoStringifiersDefined(): void

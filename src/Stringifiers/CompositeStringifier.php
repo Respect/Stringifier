@@ -18,14 +18,12 @@ use function array_unshift;
 
 final class CompositeStringifier implements Stringifier
 {
-    private const MAXIMUM_DEPTH = 3;
-    private const MAXIMUM_NUMBER_OF_ITEMS = 5;
-    private const MAXIMUM_NUMBER_OF_PROPERTIES = self::MAXIMUM_NUMBER_OF_ITEMS;
-    private const MAXIMUM_LENGTH = 120;
+    private const int MAXIMUM_DEPTH = 3;
+    private const int MAXIMUM_NUMBER_OF_ITEMS = 5;
+    private const int MAXIMUM_NUMBER_OF_PROPERTIES = self::MAXIMUM_NUMBER_OF_ITEMS;
+    private const int MAXIMUM_LENGTH = 120;
 
-    /**
-     * @var Stringifier[]
-     */
+    /** @var Stringifier[] */
     private array $stringifiers = [];
 
     public function __construct(Stringifier ...$stringifiers)
@@ -52,15 +50,15 @@ final class CompositeStringifier implements Stringifier
                 $quoter,
                 self::MAXIMUM_DEPTH,
                 self::MAXIMUM_NUMBER_OF_ITEMS,
-            )
+            ),
         );
         $stringifier->prependStringifier(
             new ObjectStringifier(
                 $stringifier,
                 $quoter,
                 self::MAXIMUM_DEPTH,
-                self::MAXIMUM_NUMBER_OF_PROPERTIES
-            )
+                self::MAXIMUM_NUMBER_OF_PROPERTIES,
+            ),
         );
         $stringifier->prependStringifier($callableStringifier = new CallableStringifier($stringifier, $quoter));
         $stringifier->prependStringifier(new FiberObjectStringifier($callableStringifier, $quoter));
@@ -81,7 +79,7 @@ final class CompositeStringifier implements Stringifier
          array_unshift($this->stringifiers, $stringifier);
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         foreach ($this->stringifiers as $stringifier) {
             $string = $stringifier->stringify($raw, $depth);

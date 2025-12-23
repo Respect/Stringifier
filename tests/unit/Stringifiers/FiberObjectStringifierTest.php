@@ -25,7 +25,7 @@ use function sprintf;
 #[CoversClass(FiberObjectStringifier::class)]
 final class FiberObjectStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItIsNotAnObjectWithDebugInfo(): void
@@ -52,7 +52,7 @@ final class FiberObjectStringifierTest extends TestCase
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote(
             sprintf('Fiber { %s }', $string),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);

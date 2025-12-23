@@ -21,11 +21,11 @@ final class FiberObjectStringifier implements Stringifier
 {
     public function __construct(
         private readonly Stringifier $stringifier,
-        private readonly Quoter $quoter
+        private readonly Quoter $quoter,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!$raw instanceof Fiber) {
             return null;
@@ -34,9 +34,9 @@ final class FiberObjectStringifier implements Stringifier
         return $this->quoter->quote(
             sprintf(
                 'Fiber { %s }',
-                $this->stringifier->stringify((new ReflectionFiber($raw))->getCallable(), $depth + 1)
+                $this->stringifier->stringify((new ReflectionFiber($raw))->getCallable(), $depth + 1),
             ),
-            $depth
+            $depth,
         );
     }
 }

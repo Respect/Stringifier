@@ -20,11 +20,11 @@ use function sprintf;
 final class ResourceStringifier implements Stringifier
 {
     public function __construct(
-        private readonly Quoter $quoter
+        private readonly Quoter $quoter,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!is_resource($raw)) {
             return null;

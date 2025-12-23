@@ -12,5 +12,5 @@ namespace Respect\Stringifier;
 
 interface Stringifier
 {
-    public function stringify(mixed $raw, int $depth): ?string;
+    public function stringify(mixed $raw, int $depth): string|null;
 }

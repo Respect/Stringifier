@@ -16,7 +16,7 @@ use function sprintf;
 
 final class FakeQuoter implements Quoter
 {
-    private const SYMBOL = '#';
+    private const string SYMBOL = '#';
 
     public function quote(string $string, int $depth): string
     {

@@ -24,7 +24,7 @@ use Respect\Stringifier\Test\Double\FakeQuoter;
 #[CoversClass(DeclaredStringifier::class)]
 final class DeclaredStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyWhenRawValueIsNotExists(): void
@@ -48,9 +48,7 @@ final class DeclaredStringifierTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @return array<int, array<int, string>>
-     */
+    /** @return array<int, array<int, string>> */
     public static function existsRawValuesProvider(): array
     {
         return [

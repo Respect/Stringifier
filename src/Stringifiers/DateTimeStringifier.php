@@ -21,11 +21,11 @@ final class DateTimeStringifier implements Stringifier
 
     public function __construct(
         private readonly Quoter $quoter,
-        private readonly string $format
+        private readonly string $format,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!$raw instanceof DateTimeInterface) {
             return null;

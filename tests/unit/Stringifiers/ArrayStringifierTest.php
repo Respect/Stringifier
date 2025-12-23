@@ -63,9 +63,9 @@ final class ArrayStringifierTest extends TestCase
                 '[%s, %s, %s]',
                 $stringifier->stringify($raw[0], $depth + 1),
                 $stringifier->stringify($raw[1], $depth + 1),
-                $stringifier->stringify($raw[2], $depth + 1)
+                $stringifier->stringify($raw[2], $depth + 1),
             ),
-            $depth
+            $depth,
         );
 
         self::assertSame($expected, $actual);
@@ -91,7 +91,7 @@ final class ArrayStringifierTest extends TestCase
                 $stringifier->stringify('bar', $depth + 1),
                 $stringifier->stringify($raw['bar'], $depth + 1),
             ),
-            $depth
+            $depth,
         );
 
         self::assertSame($expected, $actual);
@@ -115,7 +115,7 @@ final class ArrayStringifierTest extends TestCase
                 $stringifier->stringify(2, $depth + 1),
                 $stringifier->stringify(3, $depth + 1),
             ),
-            $depth
+            $depth,
         );
 
         self::assertSame($expected, $sut->stringify($raw, $depth));
@@ -148,13 +148,13 @@ final class ArrayStringifierTest extends TestCase
                                 $stringifier->stringify('d', $depth + 3),
                                 $stringifier->stringify('e', $depth + 3),
                             ),
-                            $depth + 2
-                        )
+                            $depth + 2,
+                        ),
                     ),
-                    $depth + 1
+                    $depth + 1,
                 ),
             ),
-            $depth
+            $depth,
         );
 
         self::assertSame($expected, $actual);
@@ -224,13 +224,13 @@ final class ArrayStringifierTest extends TestCase
                                 $stringifier->stringify('c', $depth + 3),
                                 $quoter->quote('...', $depth + 3),
                             ),
-                            $depth + 2
-                        )
+                            $depth + 2,
+                        ),
                     ),
-                    $depth + 1
+                    $depth + 1,
                 ),
             ),
-            $depth
+            $depth,
         );
 
         self::assertSame($expected, $actual);
@@ -256,7 +256,7 @@ final class ArrayStringifierTest extends TestCase
                 $stringifier->stringify(2, $depth + 1),
                 $stringifier->stringify(3, $depth + 1),
             ),
-            $depth
+            $depth,
         );
         $actual = $sut->stringify($raw, $depth);
 

@@ -24,7 +24,7 @@ use function sprintf;
 #[CoversClass(StringableObjectStringifier::class)]
 final class StringableObjectStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItIsNotAnInstanceOfStringable(): void
@@ -49,7 +49,7 @@ final class StringableObjectStringifierTest extends TestCase
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote(
             sprintf('%s { __toString() => %s }', ConcreteStringable::class, $string),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);

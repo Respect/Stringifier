@@ -21,7 +21,7 @@ use Respect\Stringifier\Test\Double\FakeQuoter;
 #[CoversClass(EnumerationStringifier::class)]
 final class EnumerationStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyWhenRawValueIsNotAnEnumeration(): void

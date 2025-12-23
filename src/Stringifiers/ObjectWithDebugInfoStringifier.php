@@ -23,11 +23,11 @@ final class ObjectWithDebugInfoStringifier implements Stringifier
 
     public function __construct(
         private readonly Stringifier $stringifier,
-        private readonly Quoter $quoter
+        private readonly Quoter $quoter,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!(is_object($raw) && method_exists($raw, '__debugInfo'))) {
             return null;
@@ -35,7 +35,7 @@ final class ObjectWithDebugInfoStringifier implements Stringifier
 
         return $this->quoter->quote(
             $this->format($raw, '__debugInfo() =>', $this->stringifier->stringify($raw->__debugInfo(), $depth + 1)),
-            $depth
+            $depth,
         );
     }
 }

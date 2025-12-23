@@ -47,7 +47,7 @@ final class CallableStringifier implements Stringifier
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!is_callable($raw)) {
             return null;
@@ -69,13 +69,16 @@ final class CallableStringifier implements Stringifier
             return $this->buildStaticMethod(new ReflectionMethod($raw[0], $raw[1]), $depth);
         }
 
-        /** @var callable-string $raw */
-        if (str_contains($raw, ':')) {
+        if (is_string($raw) && str_contains($raw, ':')) {
             /** @var class-string $class */
             $class = (string) strstr($raw, ':', true);
             $method = substr((string) strrchr($raw, ':'), 1);
 
             return $this->buildStaticMethod(new ReflectionMethod($class, $method), $depth);
+        }
+
+        if (!is_string($raw)) {
+            return null;
         }
 
         return $this->buildFunction(new ReflectionFunction($raw), $depth);
@@ -90,7 +93,7 @@ final class CallableStringifier implements Stringifier
     {
         return $this->quoter->quote(
             sprintf('%s->%s', $this->getName($object), $this->buildSignature($reflection, $depth)),
-            $depth
+            $depth,
         );
     }
 
@@ -98,7 +101,7 @@ final class CallableStringifier implements Stringifier
     {
         return $this->quoter->quote(
             sprintf('%s::%s', $reflection->class, $this->buildSignature($reflection, $depth)),
-            $depth
+            $depth,
         );
     }
 
@@ -112,10 +115,10 @@ final class CallableStringifier implements Stringifier
                 array_map(
                     fn(ReflectionParameter $parameter): string => $this->buildParameter(
                         $parameter,
-                        $depth + 1
+                        $depth + 1,
                     ),
-                    $function->getParameters()
-                )
+                    $function->getParameters(),
+                ),
             ),
         );
 
@@ -125,7 +128,7 @@ final class CallableStringifier implements Stringifier
                 ' use ($%s)',
                 implode(
                     ', $',
-                    array_keys($closureUsedVariables)
+                    array_keys($closureUsedVariables),
                 ),
             );
         }
@@ -160,7 +163,7 @@ final class CallableStringifier implements Stringifier
         return $parameter;
     }
 
-    private function buildValue(ReflectionParameter $reflectionParameter, int $depth): ?string
+    private function buildValue(ReflectionParameter $reflectionParameter, int $depth): string|null
     {
         if (!$reflectionParameter->isDefaultValueAvailable()) {
             return $this->stringifier->stringify(null, $depth);
@@ -178,19 +181,26 @@ final class CallableStringifier implements Stringifier
         if ($raw instanceof ReflectionUnionType) {
             return implode(
                 '|',
-                array_map(fn(ReflectionType $type) => $this->buildType($type, $depth), $raw->getTypes())
+                array_map(fn(ReflectionType $type) => $this->buildType($type, $depth), $raw->getTypes()),
             );
         }
 
         if ($raw instanceof ReflectionIntersectionType) {
             return implode(
                 '&',
-                array_map(fn(ReflectionType $type) => $this->buildType($type, $depth), $raw->getTypes())
+                array_map(fn(ReflectionType $type) => $this->buildType($type, $depth), $raw->getTypes()),
             );
         }
 
-        /** @var ReflectionNamedType $raw */
+        if ($raw instanceof ReflectionNamedType) {
+            $type = $raw->getName();
+            if ($raw->allowsNull()) {
+                $type = sprintf('?%s', $type);
+            }
 
-        return ($raw->allowsNull() ? '?' : '') . $raw->getName();
+            return $type;
+        }
+
+        return '';
     }
 }

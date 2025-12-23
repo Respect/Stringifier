@@ -21,7 +21,7 @@ use const INF;
 #[CoversClass(InfiniteNumberStringifier::class)]
 final class InfiniteNumberStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItIsNotFloat(): void

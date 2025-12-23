@@ -32,7 +32,7 @@ use function sprintf;
 #[CoversClass(ThrowableObjectStringifier::class)]
 final class ThrowableObjectStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function isShouldNotStringifyRawValueWhenItIsNotThrowable(): void
@@ -59,7 +59,7 @@ final class ThrowableObjectStringifierTest extends TestCase
                 $stringifier->stringify($raw->getMessage(), self::DEPTH + 1),
                 $raw->getLine(),
             ),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expectedValue, $actual);
@@ -81,15 +81,13 @@ final class ThrowableObjectStringifierTest extends TestCase
                 $raw::class,
                 $raw->getLine(),
             ),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expectedValue, $actual);
     }
 
-    /**
-     * @return array<array{0: Throwable}>
-     */
+    /** @return array<array{0: Throwable}> */
     public static function throwableWithMessageProvider(): array
     {
         return [
@@ -100,9 +98,7 @@ final class ThrowableObjectStringifierTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{0: Throwable}>
-     */
+    /** @return array<array{0: Throwable}> */
     public static function throwableWithoutMessageProvider(): array
     {
         return [

@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 final class WithMethods
 {
-    public function publicMethod(Iterator&Countable $parameter): ?static
+    public function publicMethod(Iterator&Countable $parameter): static|null
     {
         return $parameter instanceof SplHeap ? new static() : null;
     }

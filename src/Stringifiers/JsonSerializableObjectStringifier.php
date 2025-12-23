@@ -21,11 +21,11 @@ final class JsonSerializableObjectStringifier implements Stringifier
 
     public function __construct(
         private readonly Stringifier $stringifier,
-        private readonly Quoter $quoter
+        private readonly Quoter $quoter,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!$raw instanceof JsonSerializable) {
             return null;
@@ -33,7 +33,7 @@ final class JsonSerializableObjectStringifier implements Stringifier
 
         return $this->quoter->quote(
             $this->format($raw, 'jsonSerialize() =>', $this->stringifier->stringify($raw->jsonSerialize(), $depth + 1)),
-            $depth
+            $depth,
         );
     }
 }

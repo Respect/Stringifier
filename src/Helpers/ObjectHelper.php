@@ -18,7 +18,7 @@ use function strstr;
 
 trait ObjectHelper
 {
-    private function format(object $object, ?string ...$pieces): string
+    private function format(object $object, string|null ...$pieces): string
     {
         $filteredPieces = array_filter($pieces);
         if (count($filteredPieces) === 0) {

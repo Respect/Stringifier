@@ -20,8 +20,7 @@
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpunit/phpunit": "^12.5",
-        "respect/coding-standard": "^4.0",
-        "squizlabs/php_codesniffer": "^3.7"
+        "respect/coding-standard": "^5.0"
     },
     "autoload": {
         "psr-4": {

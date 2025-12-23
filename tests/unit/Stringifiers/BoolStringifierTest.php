@@ -19,7 +19,7 @@ use Respect\Stringifier\Test\Double\FakeQuoter;
 #[CoversClass(BoolStringifier::class)]
 final class BoolStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyWhenRawValueIsNotBoolean(): void

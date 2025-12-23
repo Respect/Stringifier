@@ -20,7 +20,7 @@ use const JSON_UNESCAPED_UNICODE;
 
 final class JsonEncodableStringifier implements Stringifier
 {
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         $string = json_encode($raw, (JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION));
         if ($string === false) {

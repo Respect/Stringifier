@@ -20,9 +20,9 @@ use function strpos;
 
 final class StandardQuoter implements Quoter
 {
-    private const OBJECT_PLACEHOLDER = ' ... }';
-    private const ARRAY_PLACEHOLDER = ' ... ]';
-    private const GENERIC_PLACEHOLDER = ' ...';
+    private const string OBJECT_PLACEHOLDER = ' ... }';
+    private const string ARRAY_PLACEHOLDER = ' ... ]';
+    private const string GENERIC_PLACEHOLDER = ' ...';
 
     public function __construct(private readonly int $maximumLength)
     {

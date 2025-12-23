@@ -25,17 +25,17 @@ final class ObjectStringifier implements Stringifier
 {
     use ObjectHelper;
 
-    private const LIMIT_EXCEEDED_PLACEHOLDER = '...';
+    private const string LIMIT_EXCEEDED_PLACEHOLDER = '...';
 
     public function __construct(
         private readonly Stringifier $stringifier,
         private readonly Quoter $quoter,
         private readonly int $maximumDepth,
-        private readonly int $maximumNumberOfProperties
+        private readonly int $maximumNumberOfProperties,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!is_object($raw)) {
             return null;
@@ -47,13 +47,11 @@ final class ObjectStringifier implements Stringifier
 
         return $this->quoter->quote(
             $this->format($raw, ...$this->getProperties(new ReflectionObject($raw), $raw, $depth + 1)),
-            $depth
+            $depth,
         );
     }
 
-    /**
-     * @return array<int, string>
-     */
+    /** @return array<int, string> */
     private function getProperties(ReflectionObject $reflectionObject, object $object, int $depth): array
     {
         $reflectionProperties = $reflectionObject->getProperties();
@@ -76,14 +74,14 @@ final class ObjectStringifier implements Stringifier
                     default => '+',
                 },
                 $reflectionProperty->getName(),
-                $this->getPropertyValue($reflectionProperty, $object, $depth)
+                $this->getPropertyValue($reflectionProperty, $object, $depth),
             ));
         }
 
         return $properties;
     }
 
-    private function getPropertyValue(ReflectionProperty $reflectionProperty, object $object, int $depth): ?string
+    private function getPropertyValue(ReflectionProperty $reflectionProperty, object $object, int $depth): string|null
     {
         if (!$reflectionProperty->isInitialized($object)) {
             return '*uninitialized*';

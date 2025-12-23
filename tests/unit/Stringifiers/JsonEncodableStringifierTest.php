@@ -20,7 +20,7 @@ use function tmpfile;
 #[CoversClass(JsonEncodableStringifier::class)]
 final class JsonEncodableStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItCannotBeConvertedToJson(): void

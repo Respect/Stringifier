@@ -24,11 +24,11 @@ final class ThrowableObjectStringifier implements Stringifier
 
     public function __construct(
         private readonly Stringifier $stringifier,
-        private readonly Quoter $quoter
+        private readonly Quoter $quoter,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!$raw instanceof Throwable) {
             return null;
@@ -43,9 +43,9 @@ final class ThrowableObjectStringifier implements Stringifier
                 $raw,
                 $this->stringifier->stringify($raw->getMessage(), $depth + 1),
                 'in',
-                $this->getSource($raw)
+                $this->getSource($raw),
             ),
-            $depth
+            $depth,
         );
     }
 

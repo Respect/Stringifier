@@ -21,7 +21,7 @@ use function acos;
 #[CoversClass(NotANumberStringifier::class)]
 final class NotANumberStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItIsNotFloat(): void

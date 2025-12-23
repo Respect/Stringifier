@@ -23,7 +23,7 @@ use Respect\Stringifier\Test\Double\FakeQuoter;
 #[CoversClass(DateTimeStringifier::class)]
 final class DateTimeStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItIsNotInstanceOfDateTimeInterface(): void
@@ -38,7 +38,7 @@ final class DateTimeStringifierTest extends TestCase
     public function itShouldStringifyRawValueWhenItIsInstanceOfDateTimeInterface(
         DateTimeInterface $raw,
         string $format,
-        string $string
+        string $string,
     ): void {
         $quoter = new FakeQuoter();
 
@@ -50,9 +50,7 @@ final class DateTimeStringifierTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @return array<int, array{0: DateTimeInterface, 1: string, 2: string}>
-     */
+    /** @return array<int, array{0: DateTimeInterface, 1: string, 2: string}> */
     public static function stringableRawValuesProvider(): array
     {
         $dateTime = new DateTime('2017-12-31T23:59:59+00:00');

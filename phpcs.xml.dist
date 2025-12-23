@@ -17,4 +17,19 @@
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
         <exclude-pattern>tests/fixtures/</exclude-pattern>
     </rule>
+    <rule ref="Squiz.Arrays.ArrayDeclaration.ValueNoNewline">
+        <exclude-pattern>tests/unit/Stringifiers/CallableStringifierTest.php</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Functions.GlobalFunction">
+        <exclude-pattern>tests/integration/lib/helpers.php</exclude-pattern>
+    </rule>
+    <rule ref="Generic.Files.InlineHTML.Found">
+        <exclude-pattern>tests/integration/</exclude-pattern>
+    </rule>
+    <rule ref="PSR12.Files.FileHeader.HeaderPosition">
+        <exclude-pattern>tests/integration/</exclude-pattern>
+    </rule>
+    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag.Found">
+        <exclude-pattern>tests/integration/</exclude-pattern>
+    </rule>
 </ruleset>

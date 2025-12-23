@@ -16,10 +16,10 @@ use function print_r;
 
 final class Stringify
 {
-    public const STARTING_DEPTH = 0;
+    public const int STARTING_DEPTH = 0;
 
     public function __construct(
-        private readonly Stringifier $stringifier
+        private readonly Stringifier $stringifier,
     ) {
     }
 

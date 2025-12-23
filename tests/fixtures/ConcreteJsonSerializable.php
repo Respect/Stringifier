@@ -10,11 +10,9 @@ declare(strict_types=1);
 
 final class ConcreteJsonSerializable implements JsonSerializable
 {
-    public const JSON_VALUE = [1, 2, 3, 'foo' => true];
+    public const array JSON_VALUE = [1, 2, 3, 'foo' => true];
 
-    /**
-     * @return array<mixed, mixed>
-     */
+    /** @return array<mixed, mixed> */
     public function jsonSerialize(): array
     {
         return self::JSON_VALUE;

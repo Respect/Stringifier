@@ -8,12 +8,10 @@
 
 declare(strict_types=1);
 
-/**
- * @implements Iterator<int>
- */
+/** @implements Iterator<int> */
 final class ConcreteIterator implements Iterator
 {
-    private const VALUES = [1, 2, 3];
+    private const array VALUES = [1, 2, 3];
 
     private int $position = 0;
 

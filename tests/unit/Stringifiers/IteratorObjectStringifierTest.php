@@ -24,7 +24,7 @@ use function sprintf;
 #[CoversClass(IteratorObjectStringifier::class)]
 final class IteratorObjectStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItIsNotTraversable(): void
@@ -58,7 +58,7 @@ final class IteratorObjectStringifierTest extends TestCase
                 'ConcreteIterator { current() => %s }',
                 $stringifier->stringify($raw->current(), self::DEPTH + 1),
             ),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);

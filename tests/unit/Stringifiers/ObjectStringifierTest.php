@@ -27,9 +27,9 @@ use function sprintf;
 #[CoversClass(ObjectStringifier::class)]
 final class ObjectStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
-    private const MAXIMUM_DEPTH = 4;
-    private const MAXIMUM_NUMBER_OF_PROPERTIES = 5;
+    private const int DEPTH = 0;
+    private const int MAXIMUM_DEPTH = 4;
+    private const int MAXIMUM_NUMBER_OF_PROPERTIES = 5;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItIsNotAnObject(): void
@@ -38,7 +38,7 @@ final class ObjectStringifierTest extends TestCase
             new FakeStringifier(),
             new FakeQuoter(),
             self::MAXIMUM_DEPTH,
-            self::MAXIMUM_NUMBER_OF_PROPERTIES
+            self::MAXIMUM_NUMBER_OF_PROPERTIES,
         );
 
         self::assertNull($sut->stringify(true, self::DEPTH));
@@ -81,7 +81,7 @@ final class ObjectStringifierTest extends TestCase
                 $stringifier->stringify($relection->getProperty('protectedProperty')->getValue($raw), self::DEPTH + 1),
                 $stringifier->stringify($relection->getProperty('privateProperty')->getValue($raw), self::DEPTH + 1),
             ),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);
@@ -106,7 +106,7 @@ final class ObjectStringifierTest extends TestCase
                 $relection->getName(),
                 '*uninitialized*',
             ),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);
@@ -141,15 +141,15 @@ final class ObjectStringifierTest extends TestCase
                             sprintf(
                                 'stdClass { +$e=%s +$f=%s }',
                                 $stringifier->stringify($raw->b->d->e, self::DEPTH + 3),
-                                $quoter->quote('stdClass {}', self::DEPTH + 3)
+                                $quoter->quote('stdClass {}', self::DEPTH + 3),
                             ),
-                            self::DEPTH + 2
-                        )
+                            self::DEPTH + 2,
+                        ),
                     ),
-                    self::DEPTH + 1
-                )
+                    self::DEPTH + 1,
+                ),
             ),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);
@@ -178,15 +178,15 @@ final class ObjectStringifierTest extends TestCase
                         $quoter->quote(
                             sprintf(
                                 'stdClass { +$property=%s }',
-                                $quoter->quote('stdClass { ... }', $maximumDepth)
+                                $quoter->quote('stdClass { ... }', $maximumDepth),
                             ),
-                            self::DEPTH + 2
-                        )
+                            self::DEPTH + 2,
+                        ),
                     ),
-                    self::DEPTH + 1
-                )
+                    self::DEPTH + 1,
+                ),
             ),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);
@@ -216,7 +216,7 @@ final class ObjectStringifierTest extends TestCase
                 $stringifier->stringify($raw->b, self::DEPTH + 1),
                 $stringifier->stringify($raw->c, self::DEPTH + 1),
             ),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);
@@ -238,9 +238,9 @@ final class ObjectStringifierTest extends TestCase
         $expected = $quoter->quote(
             sprintf(
                 'class { +$foo=%s }',
-                $stringifier->stringify($raw->foo, self::DEPTH + 1)
+                $stringifier->stringify($raw->foo, self::DEPTH + 1),
             ),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);
@@ -258,7 +258,7 @@ final class ObjectStringifierTest extends TestCase
             new FakeStringifier(),
             $quoter,
             self::MAXIMUM_DEPTH,
-            self::MAXIMUM_NUMBER_OF_PROPERTIES
+            self::MAXIMUM_NUMBER_OF_PROPERTIES,
         );
 
         $actual = $sut->stringify($raw, self::DEPTH);

@@ -24,7 +24,7 @@ use function sprintf;
 #[CoversClass(ObjectWithDebugInfoStringifier::class)]
 final class ObjectWithDebugInfoStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItIsNotAnObjectWithDebugInfo(): void
@@ -49,7 +49,7 @@ final class ObjectWithDebugInfoStringifierTest extends TestCase
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote(
             sprintf('%s { __debugInfo() => %s }', WithDebugInfo::class, $string),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertSame($expected, $actual);

@@ -10,9 +10,7 @@ declare(strict_types=1);
 
 final class WithDebugInfo
 {
-    /**
-     * @return array<string, string>
-     */
+    /** @return array<string, string> */
     public function __debugInfo(): array
     {
         return ['info' => 'This is the return of __debugInfo()'];

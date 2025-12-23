@@ -22,17 +22,17 @@ use function sprintf;
 
 final class ArrayStringifier implements Stringifier
 {
-    private const LIMIT_EXCEEDED_PLACEHOLDER = '...';
+    private const string LIMIT_EXCEEDED_PLACEHOLDER = '...';
 
     public function __construct(
         private readonly Stringifier $stringifier,
         private readonly Quoter $quoter,
         private readonly int $maximumDepth,
-        private readonly int $maximumNumberOfItems
+        private readonly int $maximumNumberOfItems,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!is_array($raw)) {
             return null;
@@ -66,7 +66,7 @@ final class ArrayStringifier implements Stringifier
         return $this->quoter->quote(sprintf('[%s]', implode(', ', $items)), $depth);
     }
 
-    private function stringifyKeyValue(mixed $value, int $depth): ?string
+    private function stringifyKeyValue(mixed $value, int $depth): string|null
     {
         if (is_array($value)) {
             return $this->stringify($value, $depth);
@@ -75,9 +75,7 @@ final class ArrayStringifier implements Stringifier
         return $this->stringifier->stringify($value, $depth);
     }
 
-    /**
-     * @param mixed[] $array
-     */
+    /** @param mixed[] $array */
     private function isSequential(array $array): bool
     {
         return array_keys($array) === range(0, count($array) - 1);

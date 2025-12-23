@@ -27,7 +27,7 @@ use function sprintf;
 #[CoversClass(CallableStringifier::class)]
 final class CallableStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyWhenRawValueIsNotCallable(): void
@@ -64,7 +64,7 @@ final class CallableStringifierTest extends TestCase
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote(
             sprintf('function (int $value = %s): int', $stringifier->stringify(1, self::DEPTH + 1)),
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertEquals($expected, $actual);
@@ -82,15 +82,13 @@ final class CallableStringifierTest extends TestCase
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote(
             'array_walk(object|array &$array, callable $callback, ?mixed $arg = fake.1.cbade92e): true',
-            self::DEPTH
+            self::DEPTH,
         );
 
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @return array<int, array{0: callable, 1: string}>
-     */
+    /** @return array<int, array{0: callable, 1: string}> */
     public static function callableRawValuesProvider(): array
     {
         $var1 = 1;
@@ -101,6 +99,7 @@ final class CallableStringifierTest extends TestCase
             [static fn(): int => 1, 'function (): int'],
             [static fn(float $value): int => (int) $value, 'function (float $value): int'],
             [static fn(float &$value): int => (int) $value, 'function (float &$value): int'],
+            // phpcs:ignore SlevomatCodingStandard.TypeHints.DNFTypeHintFormat
             [static fn(?float $value): int => (int) $value, 'function (?float $value): int'],
             [static fn(int $value = self::DEPTH): int => $value, 'function (int $value = self::DEPTH): int'],
             [static fn(int|float $value): int => (int) $value, 'function (int|float $value): int'],

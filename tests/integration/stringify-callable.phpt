@@ -16,7 +16,7 @@ outputMultiple(
     static fn(int $foo): bool => (bool) $foo,
     static function (int $foo) use ($variable): string {
         return $variable::class;
-    }
+    },
 );
 ?>
 --EXPECT--

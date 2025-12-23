@@ -22,11 +22,11 @@ use function trait_exists;
 final class DeclaredStringifier implements Stringifier
 {
     public function __construct(
-        private readonly Quoter $quoter
+        private readonly Quoter $quoter,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!is_string($raw) || $this->isNotDeclared($raw)) {
             return null;

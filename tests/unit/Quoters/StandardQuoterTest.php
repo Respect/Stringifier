@@ -21,7 +21,7 @@ use function strlen;
 #[CoversClass(StandardQuoter::class)]
 final class StandardQuoterTest extends TestCase
 {
-    private const LIMIT = 20;
+    private const int LIMIT = 20;
 
     #[Test]
     public function itShouldNotQuoteWhenDepthIsBiggerThanZero(): void
@@ -46,9 +46,7 @@ final class StandardQuoterTest extends TestCase
         self::assertLessThanOrEqual(self::LIMIT, strlen($actual));
     }
 
-    /**
-     * @return array<int, array<int, string>>
-     */
+    /** @return array<int, array<int, string>> */
     public static function provideData(): array
     {
         return [

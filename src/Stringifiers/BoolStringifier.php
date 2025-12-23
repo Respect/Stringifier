@@ -18,11 +18,11 @@ use function is_bool;
 final class BoolStringifier implements Stringifier
 {
     public function __construct(
-        private readonly Quoter $quoter
+        private readonly Quoter $quoter,
     ) {
     }
 
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string|null
     {
         if (!is_bool($raw)) {
             return null;

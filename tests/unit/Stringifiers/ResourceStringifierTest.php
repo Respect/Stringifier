@@ -21,7 +21,7 @@ use function tmpfile;
 #[CoversClass(ResourceStringifier::class)]
 final class ResourceStringifierTest extends TestCase
 {
-    private const DEPTH = 0;
+    private const int DEPTH = 0;
 
     #[Test]
     public function itShouldNotStringifyRawValueWhenItIsNotOfTypeResource(): void
