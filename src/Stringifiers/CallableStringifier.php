@@ -61,11 +61,11 @@ final class CallableStringifier implements Stringifier
             return $this->buildMethod(new ReflectionMethod($raw, '__invoke'), $raw, $depth);
         }
 
-        if (is_array($raw) && is_object($raw[0])) {
+        if (is_array($raw) && is_object($raw[0]) && is_string($raw[1])) {
             return $this->buildMethod(new ReflectionMethod($raw[0], $raw[1]), $raw[0], $depth);
         }
 
-        if (is_array($raw) && is_string($raw[0])) {
+        if (is_array($raw) && is_string($raw[0]) && is_string($raw[1])) {
             return $this->buildStaticMethod(new ReflectionMethod($raw[0], $raw[1]), $depth);
         }
 
@@ -81,7 +81,7 @@ final class CallableStringifier implements Stringifier
         return $this->buildFunction(new ReflectionFunction($raw), $depth);
     }
 
-    public function buildFunction(ReflectionFunction $raw, int $depth): ?string
+    public function buildFunction(ReflectionFunction $raw, int $depth): string
     {
         return $this->quoter->quote($this->buildSignature($raw, $depth), $depth);
     }

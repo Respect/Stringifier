@@ -12,7 +12,7 @@ final class WithMethods
 {
     public function publicMethod(Iterator&Countable $parameter): ?static
     {
-        return new static();
+        return $parameter instanceof SplHeap ? new static() : null;
     }
 
     public static function publicStaticMethod(int|float $parameter): void

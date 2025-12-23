@@ -18,7 +18,7 @@ use function serialize;
 
 final class FakeStringifier implements Stringifier
 {
-    public function stringify(mixed $raw, int $depth): ?string
+    public function stringify(mixed $raw, int $depth): string
     {
         return implode('.', ['fake', $depth, hash('crc32', serialize($raw))]);
     }

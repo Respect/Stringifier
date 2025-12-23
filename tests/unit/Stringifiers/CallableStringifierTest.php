@@ -24,9 +24,6 @@ use Respect\Stringifier\Test\Double\FakeStringifier;
 use function array_sum;
 use function sprintf;
 
-use const PHP_MAJOR_VERSION;
-use const PHP_MINOR_VERSION;
-
 #[CoversClass(CallableStringifier::class)]
 final class CallableStringifierTest extends TestCase
 {
@@ -76,10 +73,6 @@ final class CallableStringifierTest extends TestCase
     #[Test]
     public function itShouldStringifyWhenRawValueIsCallableThatDoesNotHaveAnAccessibleDefaultValue(): void
     {
-        if ([8, 1] !== [PHP_MAJOR_VERSION, PHP_MINOR_VERSION]) {
-            self::markTestSkipped('This test is not applicable to PHP 8.1+');
-        }
-
         $raw = 'array_walk';
 
         $quoter = new FakeQuoter();
@@ -88,7 +81,7 @@ final class CallableStringifierTest extends TestCase
 
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote(
-            'array_walk(object|array &$array, callable $callback, ?mixed $arg = fake.1.cbade92e): bool',
+            'array_walk(object|array &$array, callable $callback, ?mixed $arg = fake.1.cbade92e): true',
             self::DEPTH
         );
 
