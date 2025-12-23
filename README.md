@@ -17,7 +17,7 @@ using [Composer](http://getcomposer.org).
 composer require respect/stringifier
 ```
 
-This library requires PHP >= 8.1.
+This library requires PHP >= 8.3.
 
 ## Usage
 

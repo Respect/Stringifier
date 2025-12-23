@@ -14,7 +14,6 @@ use ConcreteJsonSerializable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Stringifiers\JsonSerializableObjectStringifier;
 use Respect\Stringifier\Test\Double\FakeQuoter;
 use Respect\Stringifier\Test\Double\FakeStringifier;
@@ -22,7 +21,6 @@ use stdClass;
 
 use function sprintf;
 
-#[CoversClass(ObjectHelper::class)]
 #[CoversClass(JsonSerializableObjectStringifier::class)]
 final class JsonSerializableObjectStringifierTest extends TestCase
 {

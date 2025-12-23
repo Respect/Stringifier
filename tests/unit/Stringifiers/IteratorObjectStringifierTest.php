@@ -15,14 +15,12 @@ use ConcreteIterator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Stringifiers\IteratorObjectStringifier;
 use Respect\Stringifier\Test\Double\FakeQuoter;
 use Respect\Stringifier\Test\Double\FakeStringifier;
 
 use function sprintf;
 
-#[CoversClass(ObjectHelper::class)]
 #[CoversClass(IteratorObjectStringifier::class)]
 final class IteratorObjectStringifierTest extends TestCase
 {

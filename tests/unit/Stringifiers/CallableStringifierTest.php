@@ -17,7 +17,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Stringifiers\CallableStringifier;
 use Respect\Stringifier\Test\Double\FakeQuoter;
 use Respect\Stringifier\Test\Double\FakeStringifier;
@@ -28,7 +27,6 @@ use function sprintf;
 use const PHP_MAJOR_VERSION;
 use const PHP_MINOR_VERSION;
 
-#[CoversClass(ObjectHelper::class)]
 #[CoversClass(CallableStringifier::class)]
 final class CallableStringifierTest extends TestCase
 {

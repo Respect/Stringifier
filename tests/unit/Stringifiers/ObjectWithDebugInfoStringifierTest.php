@@ -13,7 +13,6 @@ namespace Respect\Stringifier\Test\Unit\Stringifiers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Helpers\ObjectHelper;
 use Respect\Stringifier\Stringifiers\ObjectWithDebugInfoStringifier;
 use Respect\Stringifier\Test\Double\FakeQuoter;
 use Respect\Stringifier\Test\Double\FakeStringifier;
@@ -22,7 +21,6 @@ use WithDebugInfo;
 
 use function sprintf;
 
-#[CoversClass(ObjectHelper::class)]
 #[CoversClass(ObjectWithDebugInfoStringifier::class)]
 final class ObjectWithDebugInfoStringifierTest extends TestCase
 {
