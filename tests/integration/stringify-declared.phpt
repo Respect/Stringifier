@@ -5,11 +5,13 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
+use Respect\Stringifier\Helpers\ObjectHelper;
+
 outputMultiple(
     Traversable::class,
     ArrayIterator::class,
     BasicEnumeration::class,
-    Respect\Stringifier\Helpers\ObjectHelper::class,
+    ObjectHelper::class,
 );
 ?>
 --EXPECT--

@@ -5,4 +5,3 @@ parameters:
     - tests/
   fileExtensions:
     - php
-    - phpt
