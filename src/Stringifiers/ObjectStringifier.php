@@ -56,7 +56,15 @@ final class ObjectStringifier implements Stringifier
      */
     private function getProperties(ReflectionObject $reflectionObject, object $object, int $depth): array
     {
-        $reflectionProperties = $reflectionObject->getProperties();
+        $reflectionProperties = [];
+        while ($reflectionObject) {
+            $reflectionProperties = [
+                ...$reflectionProperties,
+                ...$reflectionObject->getProperties(),
+            ];
+            $reflectionObject = $reflectionObject->getParentClass();
+        }
+
         if (count($reflectionProperties) === 0) {
             return [];
         }

@@ -13,6 +13,7 @@ namespace Respect\Stringifier\Test\Unit\Stringifiers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use ReflectionObject;
 use Respect\Stringifier\Stringifiers\ObjectStringifier;
 use Respect\Stringifier\Test\Double\FakeQuoter;
@@ -22,6 +23,7 @@ use stdClass;
 use WithProperties;
 use WithUninitializedProperties;
 
+use function assert;
 use function sprintf;
 
 #[CoversClass(ObjectStringifier::class)]
@@ -71,6 +73,8 @@ final class ObjectStringifierTest extends TestCase
         $sut = new ObjectStringifier($stringifier, $quoter, self::MAXIMUM_DEPTH, self::MAXIMUM_NUMBER_OF_PROPERTIES);
 
         $relection = new ReflectionObject($raw);
+        $parentReflection = $relection->getParentClass();
+        assert($parentReflection instanceof ReflectionClass);
 
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote(
@@ -79,7 +83,10 @@ final class ObjectStringifierTest extends TestCase
                 $relection->getName(),
                 $stringifier->stringify($relection->getProperty('publicProperty')->getValue($raw), self::DEPTH + 1),
                 $stringifier->stringify($relection->getProperty('protectedProperty')->getValue($raw), self::DEPTH + 1),
-                $stringifier->stringify($relection->getProperty('privateProperty')->getValue($raw), self::DEPTH + 1),
+                $stringifier->stringify(
+                    $parentReflection->getProperty('privateProperty')->getValue($raw),
+                    self::DEPTH + 1,
+                ),
             ),
             self::DEPTH
         );
