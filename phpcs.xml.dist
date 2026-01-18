@@ -32,4 +32,8 @@
     <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag.Found">
         <exclude-pattern>tests/integration/</exclude-pattern>
     </rule>
+    <rule ref="SlevomatCodingStandard.Functions.StaticClosure.ClosureNotStatic">
+        <exclude-pattern>tests/integration</exclude-pattern>
+        <exclude-pattern>tests/unit/Stringifiers/CallableStringifierTest.php</exclude-pattern>
+    </rule>
 </ruleset>

@@ -32,18 +32,43 @@ final class CallableStringifierTest extends TestCase
     #[Test]
     public function itShouldNotStringifyWhenRawValueIsNotCallable(): void
     {
-        $sut = new CallableStringifier(new FakeStringifier(), new FakeQuoter());
+        $sut = new CallableStringifier(new FakeStringifier(), new FakeQuoter(), closureOnly: false);
 
         self::assertNull($sut->stringify(1, self::DEPTH));
     }
 
     #[Test]
-    #[DataProvider('callableRawValuesProvider')]
-    public function itShouldStringifyWhenRawValueIsCallable(callable $raw, string $expectedWithoutQuotes): void
+    #[DataProvider('closureRawValuesProvider')]
+    public function itShouldStringifyWhenRawValueIsClosure(callable $raw, string $expectedWithoutQuotes): void
     {
         $quoter = new FakeQuoter();
 
         $sut = new CallableStringifier(new FakeStringifier(), $quoter);
+
+        $actual = $sut->stringify($raw, self::DEPTH);
+        $expected = $quoter->quote($expectedWithoutQuotes, self::DEPTH);
+
+        self::assertEquals($expected, $actual);
+    }
+
+    #[Test]
+    #[DataProvider('nonClosureCallableRawValuesProvider')]
+    public function itShouldNotStringifyNonClosureCallableByDefault(callable $raw, string $useless): void
+    {
+        $sut = new CallableStringifier(new FakeStringifier(), new FakeQuoter());
+
+        self::assertNull($sut->stringify($raw, self::DEPTH));
+    }
+
+    #[Test]
+    #[DataProvider('nonClosureCallableRawValuesProvider')]
+    public function itShouldStringifyNonClosureCallableWhenClosureOnlyIsFalse(
+        callable $raw,
+        string $expectedWithoutQuotes,
+    ): void {
+        $quoter = new FakeQuoter();
+
+        $sut = new CallableStringifier(new FakeStringifier(), $quoter, closureOnly: false);
 
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote($expectedWithoutQuotes, self::DEPTH);
@@ -63,7 +88,7 @@ final class CallableStringifierTest extends TestCase
 
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote(
-            sprintf('function (int $value = %s): int', $stringifier->stringify(1, self::DEPTH + 1)),
+            sprintf('Closure { static fn(int $value = %s): int }', $stringifier->stringify(1, self::DEPTH + 1)),
             self::DEPTH,
         );
 
@@ -77,7 +102,7 @@ final class CallableStringifierTest extends TestCase
 
         $quoter = new FakeQuoter();
 
-        $sut = new CallableStringifier(new FakeStringifier(), $quoter);
+        $sut = new CallableStringifier(new FakeStringifier(), $quoter, closureOnly: false);
 
         $actual = $sut->stringify($raw, self::DEPTH);
         $expected = $quoter->quote(
@@ -88,40 +113,87 @@ final class CallableStringifierTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /** @return array<int, array{0: callable, 1: string}> */
-    public static function callableRawValuesProvider(): array
+    /** @return array<string, array{0: callable, 1: string}> */
+    public static function closureRawValuesProvider(): array
     {
         $var1 = 1;
         $var2 = 2;
 
         return [
-            [static fn() => 1, 'function ()'],
-            [static fn(): int => 1, 'function (): int'],
-            [static fn(float $value): int => (int) $value, 'function (float $value): int'],
-            [static fn(float &$value): int => (int) $value, 'function (float &$value): int'],
-            // phpcs:ignore SlevomatCodingStandard.TypeHints.DNFTypeHintFormat
-            [static fn(?float $value): int => (int) $value, 'function (?float $value): int'],
-            [static fn(int $value = self::DEPTH): int => $value, 'function (int $value = self::DEPTH): int'],
-            [static fn(int|float $value): int => (int) $value, 'function (int|float $value): int'],
-            [static fn(Countable&Iterator $value): int => $value->count(), 'function (Countable&Iterator $value): int'],
-            [static fn(int ...$value): int => array_sum($value), 'function (int ...$value): int'],
-            [
-                static fn(float $value1, float $value2): float => $value1 + $value2,
-                'function (float $value1, float $value2): float',
+            'static closure without parameters' => [
+                static fn() => 1,
+                'Closure { static fn() }',
             ],
-            [
+            'non-static closure without parameters' => [
+                fn() => 1,
+                'Closure { fn() }',
+            ],
+            'static closure with return type' => [
+                static fn(): int => 1,
+                'Closure { static fn(): int }',
+            ],
+            'non-static closure with return type' => [
+                fn(): int => 1,
+                'Closure { fn(): int }',
+            ],
+            'static closure with typed parameter' => [
+                static fn(float $value): int => (int) $value,
+                'Closure { static fn(float $value): int }',
+            ],
+            'static closure with reference parameter' => [
+                static fn(float &$value): int => (int) $value,
+                'Closure { static fn(float &$value): int }',
+            ],
+            'static closure with nullable parameter' => [
+                static fn(float|null $value): int => (int) $value,
+                'Closure { static fn(?float $value): int }',
+            ],
+            'static closure with constant default value' => [
+                static fn(int $value = self::DEPTH): int => $value,
+                'Closure { static fn(int $value = self::DEPTH): int }',
+            ],
+            'static closure with union type parameter' => [
+                static fn(int|float $value): int => (int) $value,
+                'Closure { static fn(int|float $value): int }',
+            ],
+            'static closure with intersection type parameter' => [
+                static fn(Countable&Iterator $value): int => $value->count(),
+                'Closure { static fn(Countable&Iterator $value): int }',
+            ],
+            'static closure with variadic parameter' => [
+                static fn(int ...$value): int => array_sum($value),
+                'Closure { static fn(int ...$value): int }',
+            ],
+            'static closure with multiple parameters' => [
+                static fn(float $value1, float $value2): float => $value1 + $value2,
+                'Closure { static fn(float $value1, float $value2): float }',
+            ],
+            'static closure with single use variable' => [
                 static function (int $value) use ($var1): int {
                     return $value + $var1;
                 },
-                'function (int $value) use ($var1): int',
+                'Closure { static fn(int $value) use ($var1): int }',
             ],
-            [
+            'static closure with multiple use variables' => [
                 static function (int $value) use ($var1, $var2): int {
                     return $value + $var1 + $var2;
                 },
-                'function (int $value) use ($var1, $var2): int',
+                'Closure { static fn(int $value) use ($var1, $var2): int }',
             ],
-            [
+            'non-static closure with use variable' => [
+                function (int $value) use ($var1): int {
+                    return $value + $var1;
+                },
+                'Closure { fn(int $value) use ($var1): int }',
+            ],
+        ];
+    }
+
+    /** @return array<string, array{0: callable, 1: string}> */
+    public static function nonClosureCallableRawValuesProvider(): array
+    {
+        return [
+            'invokable object' => [
                 new class {
                     public function __invoke(int $parameter): never
                     {
@@ -130,19 +202,22 @@ final class CallableStringifierTest extends TestCase
                 },
                 'class->__invoke(int $parameter): never',
             ],
-            [
+            'object method as array' => [
                 [new DateTime(), 'format'],
                 'DateTime->format(string $format)',
             ],
-            [
+            'static method as array' => [
                 ['DateTime', 'createFromImmutable'],
                 'DateTime::createFromImmutable(DateTimeImmutable $object)',
             ],
-            [
+            'static method as string' => [
                 'DateTimeImmutable::getLastErrors',
                 'DateTimeImmutable::getLastErrors()',
             ],
-            ['chr', 'chr(int $codepoint): string'],
+            'function name as string' => [
+                'chr',
+                'chr(int $codepoint): string',
+            ],
         ];
     }
 }

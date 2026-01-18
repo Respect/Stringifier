@@ -103,23 +103,8 @@ echo stringify(new class { public int $property = 42; }) . PHP_EOL;
 echo stringify(new class extends WithProperties { }) . PHP_EOL;
 // `WithProperties@anonymous { +$publicProperty=true #$protectedProperty=42 }`
 
-echo stringify('chr') . PHP_EOL;
-// `chr(int $codepoint): string`
-
-echo stringify([new WithMethods(), 'publicMethod']) . PHP_EOL;
-// `WithMethods->publicMethod(Iterator&Countable $parameter): ?static`
-
-echo stringify('WithMethods::publicStaticMethod') . PHP_EOL;
-// `WithMethods::publicStaticMethod(int|float $parameter): void`
-
-echo stringify(['WithMethods', 'publicStaticMethod']) . PHP_EOL;
-// `WithMethods::publicStaticMethod(int|float $parameter): void`
-
-echo stringify(new WithInvoke()) . PHP_EOL;
-// `WithInvoke->__invoke(int $parameter = 0): never`
-
-echo stringify(static fn(int $foo): string => '') . PHP_EOL;
-// `function (int $foo): string`
+echo stringify(fn(int $foo): string => '') . PHP_EOL;
+// `Closure { fn(int $foo): string }`
 
 echo stringify(new DateTime()) . PHP_EOL;
 // `DateTime { 2023-04-21T11:29:03+00:00 }`

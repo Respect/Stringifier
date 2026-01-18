@@ -60,8 +60,10 @@ final class CompositeStringifier implements Stringifier
                 self::MAXIMUM_NUMBER_OF_PROPERTIES,
             ),
         );
-        $stringifier->prependStringifier($callableStringifier = new CallableStringifier($stringifier, $quoter));
-        $stringifier->prependStringifier(new FiberObjectStringifier($callableStringifier, $quoter));
+        $stringifier->prependStringifier(new CallableStringifier($stringifier, $quoter));
+        $stringifier->prependStringifier(
+            new FiberObjectStringifier(new CallableStringifier($stringifier, $quoter, closureOnly: false), $quoter),
+        );
         $stringifier->prependStringifier(new EnumerationStringifier($quoter));
         $stringifier->prependStringifier(new ObjectWithDebugInfoStringifier($arrayStringifier, $quoter));
         $stringifier->prependStringifier(new ArrayObjectStringifier($arrayStringifier, $quoter));

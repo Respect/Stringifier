@@ -44,41 +44,42 @@ final class CallableStringifier implements Stringifier
     public function __construct(
         private readonly Stringifier $stringifier,
         private readonly Quoter $quoter,
+        private readonly bool $closureOnly = true,
     ) {
     }
 
     public function stringify(mixed $raw, int $depth): string|null
     {
-        if (!is_callable($raw)) {
-            return null;
-        }
-
         if ($raw instanceof Closure) {
             return $this->buildFunction(new ReflectionFunction($raw), $depth);
+        }
+
+        if ($this->closureOnly || !is_callable($raw)) {
+            return null;
         }
 
         if (is_object($raw)) {
             return $this->buildMethod(new ReflectionMethod($raw, '__invoke'), $raw, $depth);
         }
 
-        if (is_array($raw) && is_object($raw[0]) && is_string($raw[1])) {
+        if (is_array($raw) && isset($raw[0], $raw[1]) && is_object($raw[0]) && is_string($raw[1])) {
             return $this->buildMethod(new ReflectionMethod($raw[0], $raw[1]), $raw[0], $depth);
         }
 
-        if (is_array($raw) && is_string($raw[0]) && is_string($raw[1])) {
+        if (is_array($raw) && isset($raw[0], $raw[1]) && is_string($raw[0]) && is_string($raw[1])) {
             return $this->buildStaticMethod(new ReflectionMethod($raw[0], $raw[1]), $depth);
         }
 
-        if (is_string($raw) && str_contains($raw, ':')) {
+        if (!is_string($raw)) {
+            return null;
+        }
+
+        if (str_contains($raw, ':')) {
             /** @var class-string $class */
             $class = (string) strstr($raw, ':', true);
             $method = substr((string) strrchr($raw, ':'), 1);
 
             return $this->buildStaticMethod(new ReflectionMethod($class, $method), $depth);
-        }
-
-        if (!is_string($raw)) {
-            return null;
         }
 
         return $this->buildFunction(new ReflectionFunction($raw), $depth);
@@ -107,8 +108,7 @@ final class CallableStringifier implements Stringifier
 
     private function buildSignature(ReflectionFunctionAbstract $function, int $depth): string
     {
-        $signature = $function->isClosure() ? 'function ' : $function->getName();
-        $signature .= sprintf(
+        $signature = sprintf(
             '(%s)',
             implode(
                 ', ',
@@ -138,7 +138,11 @@ final class CallableStringifier implements Stringifier
             $signature .= ': ' . $this->buildType($returnType, $depth);
         }
 
-        return $signature;
+        if ($function->isClosure()) {
+            return sprintf('Closure { %sfn%s }', $function->isStatic() ? 'static ' : '', $signature);
+        }
+
+        return $function->getName() . $signature;
     }
 
     private function buildParameter(ReflectionParameter $reflectionParameter, int $depth): string
