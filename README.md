@@ -136,16 +136,19 @@ To see more examples of how to use the library check the [integration tests](tes
 
 ### Custom stringifiers
 
-Stringifier library is extensible, you can create your own stringifiers and use them with the `Stringify` class.
+Stringifier library is extensible, you can create your own stringifiers and handlers. Considering the internal design,
+it's best to create an implementation of `Handler`, and then use it to create a `HandlerStringifier`.
 
 ```php
-use Respect\Stringifier\Stringifier;
-use Respect\Stringifier\Stringifiers\CompositeStringifier;
+use Respect\Stringifier\DumpStringifier;
+use Respect\Stringifier\Handler;
+use Respect\Stringifier\Handlers\CompositeHandler;
+use Respect\Stringifier\HandlerStringifier;
 use Respect\Stringifier\Stringify;
 
-$compositeStringifier = CompositeStringifier::createDefault();
-$compositeStringifier->prependStringifier(new class implements Stringifier {
-    public function stringify(mixed $raw, int $depth): ?string
+$compositeHandler = CompositeHandler::create();
+$compositeHandler->prependStringifier(new class implements Handler {
+    public function handle(mixed $raw, int $depth): ?string
     {
         if (is_object($raw) && method_exists($raw, 'toString')) {
             return $raw->toString();
@@ -155,9 +158,9 @@ $compositeStringifier->prependStringifier(new class implements Stringifier {
     }
 });
 
-$stringify = new Stringify($compositeStringifier);
+$stringifier = new HandlerStringifier($compositeHandler, new DumpStringifier());
 
-echo $stringify->value(new class {
+echo $stringifier->stringify(new class {
     public function toString(): string
     {
         return 'Hello, world!';
@@ -165,3 +168,5 @@ echo $stringify->value(new class {
 });
 // Hello, world!
 ```
+
+The `DumpStringifier` is a fallback stringifier that uses `print_r`-like output. You can replace it with any other.
