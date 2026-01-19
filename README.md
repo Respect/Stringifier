@@ -32,13 +32,11 @@ echo Respect\Stringifier\stringify($value);
 ### Using as an object
 
 ```php
-$stringify = Respect\Stringifier\Stringify::createDefault();
+use Respect\Stringifier\HandlerStringifier;
 
-// with the `value` method
-echo $stringify->value($value);
+$stringifier = HandlerStringifier::create();
 
-// with the `__invoke` method
-echo $stringify($value);
+echo $stringifier->stringify($value);
 ```
 
 ### Examples

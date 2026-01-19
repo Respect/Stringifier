@@ -10,13 +10,15 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier;
 
+use Respect\Stringifier\Handlers\CompositeHandler;
+
 function stringify(mixed $value): string
 {
-    static $stringify;
+    static $stringifier;
 
-    if ($stringify === null) {
-        $stringify = Stringify::createDefault();
+    if (!$stringifier instanceof Stringifier) {
+        $stringifier = new HandlerStringifier(CompositeHandler::create(), new DumpStringifier());
     }
 
-    return $stringify->value($value);
+    return $stringifier->stringify($value);
 }

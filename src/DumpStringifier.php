@@ -10,7 +10,12 @@ declare(strict_types=1);
 
 namespace Respect\Stringifier;
 
-interface Stringifier
+use function print_r;
+
+final class DumpStringifier implements Stringifier
 {
-    public function stringify(mixed $raw): string;
+    public function stringify(mixed $raw): string
+    {
+        return print_r($raw, true);
+    }
 }

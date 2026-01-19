@@ -18,7 +18,7 @@
         <exclude-pattern>tests/fixtures/</exclude-pattern>
     </rule>
     <rule ref="Squiz.Arrays.ArrayDeclaration.ValueNoNewline">
-        <exclude-pattern>tests/unit/Stringifiers/CallableStringifierTest.php</exclude-pattern>
+        <exclude-pattern>tests/unit/Handlers/CallableHandlerTest.php</exclude-pattern>
     </rule>
     <rule ref="Squiz.Functions.GlobalFunction">
         <exclude-pattern>tests/integration/lib/helpers.php</exclude-pattern>
@@ -34,6 +34,6 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Functions.StaticClosure.ClosureNotStatic">
         <exclude-pattern>tests/integration</exclude-pattern>
-        <exclude-pattern>tests/unit/Stringifiers/CallableStringifierTest.php</exclude-pattern>
+        <exclude-pattern>tests/unit/Handlers/CallableHandlerTest.php</exclude-pattern>
     </rule>
 </ruleset>
