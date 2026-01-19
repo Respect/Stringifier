@@ -14,19 +14,19 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Stringifier\Quoters\StandardQuoter;
+use Respect\Stringifier\Quoters\CodeQuoter;
 
 use function strlen;
 
-#[CoversClass(StandardQuoter::class)]
-final class StandardQuoterTest extends TestCase
+#[CoversClass(CodeQuoter::class)]
+final class CodeQuoterTest extends TestCase
 {
     private const int LIMIT = 20;
 
     #[Test]
     public function itShouldNotQuoteWhenDepthIsBiggerThanZero(): void
     {
-        $quoter = new StandardQuoter(self::LIMIT);
+        $quoter = new CodeQuoter(self::LIMIT);
 
         $expectedValue = 'code';
         $actualValue = $quoter->quote('code', 1);
@@ -38,7 +38,7 @@ final class StandardQuoterTest extends TestCase
     #[DataProvider('provideData')]
     public function isShouldQuoteWhenDepthIsBiggerThanZero(string $string, string $expected): void
     {
-        $sut = new StandardQuoter(self::LIMIT);
+        $sut = new CodeQuoter(self::LIMIT);
 
         $actual = $sut->quote($string, 0);
 

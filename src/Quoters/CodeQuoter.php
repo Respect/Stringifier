@@ -18,7 +18,7 @@ use function sprintf;
 use function str_contains;
 use function strpos;
 
-final class StandardQuoter implements Quoter
+final class CodeQuoter implements Quoter
 {
     private const string OBJECT_PLACEHOLDER = ' ... }';
     private const string ARRAY_PLACEHOLDER = ' ... ]';
