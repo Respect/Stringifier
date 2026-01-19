@@ -19,6 +19,15 @@ composer require respect/stringifier
 
 This library requires PHP >= 8.3.
 
+## IMPORTANT: Be careful with version 2.0
+
+If you are using version 2.0, please be aware of security concerns related to information leakage.
+
+1. **Class/Interface/Enum Detection**: Version 2.0 would automatically detect and format strings that matched internal class, interface, or enum names. This could expose your application's internal architecture.
+2. **Callable String Detection**: Version 2.0 would interpret strings and arrays as callables by default, potentially exposing sensitive data. .
+
+If you're not stringifiying strings coming from and end-user, you're not at risk. However, later versions changed this to a "secure-by-default" approach, assuming that strings may come from untrusted sources.
+
 ## Usage
 
 Below a quick guide of how to use the library.
