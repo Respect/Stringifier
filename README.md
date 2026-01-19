@@ -83,12 +83,6 @@ echo stringify(['foo' => true, 'bar' => 42, 'baz' => ['qux' => INF, 'quux' => nu
 echo stringify(tmpfile()) . PHP_EOL;
 // `resource <stream>`
 
-echo stringify(BasicEnumeration::FOO) . PHP_EOL;
-// `BasicEnumeration::FOO`
-
-echo stringify(BackedEnumeration::QUX) . PHP_EOL;
-// `BackedEnumeration::QUX`
-
 echo stringify(new WithProperties()) . PHP_EOL;
 // `WithProperties { +$publicProperty=true #$protectedProperty=42 -$privateProperty="something" }`
 
@@ -136,9 +130,6 @@ echo stringify(new RuntimeException()) . PHP_EOL;
 
 echo stringify(new InvalidArgumentException('This is the exception message')) . PHP_EOL;
 // `InvalidArgumentException { "This is the exception message" in file.php:112 }`
-
-echo stringify(Traversable::class) . PHP_EOL;
-// `Traversable`
 ```
 
 To see more examples of how to use the library check the [integration tests](tests/integration).

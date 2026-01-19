@@ -41,7 +41,6 @@ final class CompositeHandler implements Handler
             new ResourceHandler($quoter),
             new BoolHandler($quoter),
             new NullHandler($quoter),
-            new DeclaredHandler($quoter),
             $jsonEncodableHandler = new JsonEncodableHandler(),
         );
         $handler->prependHandler(
