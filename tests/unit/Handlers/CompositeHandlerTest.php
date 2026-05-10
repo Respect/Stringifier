@@ -15,6 +15,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Respect\Stringifier\Handlers\CompositeHandler;
 use Respect\Stringifier\Test\Double\FakeHandler;
+use Respect\Stringifier\Test\Double\FakeQuoter;
 use Respect\Stringifier\Test\Double\LameHandler;
 use stdClass;
 
@@ -74,5 +75,14 @@ final class CompositeHandlerTest extends TestCase
     public function itShouldCreateDefaultCompositeHandler(): void
     {
         self::assertInstanceOf(CompositeHandler::class, CompositeHandler::create());
+    }
+
+    #[Test]
+    public function itShouldCreateCompositeHandlerWithTheGivenQuoter(): void
+    {
+        $quoter = new FakeQuoter();
+        $sut = CompositeHandler::create($quoter);
+
+        self::assertSame($quoter->quote('true', self::DEPTH), $sut->handle(true, self::DEPTH));
     }
 }

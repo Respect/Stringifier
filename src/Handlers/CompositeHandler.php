@@ -12,6 +12,7 @@ namespace Respect\Stringifier\Handlers;
 
 use DateTimeInterface;
 use Respect\Stringifier\Handler;
+use Respect\Stringifier\Quoter;
 use Respect\Stringifier\Quoters\CodeQuoter;
 
 use function array_unshift;
@@ -31,10 +32,8 @@ final class CompositeHandler implements Handler
         $this->handlers = $handlers;
     }
 
-    public static function create(): self
+    public static function create(Quoter $quoter = new CodeQuoter(self::MAXIMUM_LENGTH)): self
     {
-        $quoter = new CodeQuoter(self::MAXIMUM_LENGTH);
-
         $handler = new self(
             new InfiniteNumberHandler($quoter),
             new NotANumberHandler($quoter),
