@@ -62,11 +62,11 @@ final class CallableHandler implements Handler
             return $this->buildMethod(new ReflectionMethod($raw, '__invoke'), $raw, $depth);
         }
 
-        if (is_array($raw) && isset($raw[0], $raw[1]) && is_object($raw[0]) && is_string($raw[1])) {
+        if (is_array($raw) && is_object($raw[0])) {
             return $this->buildMethod(new ReflectionMethod($raw[0], $raw[1]), $raw[0], $depth);
         }
 
-        if (is_array($raw) && isset($raw[0], $raw[1]) && is_string($raw[0]) && is_string($raw[1])) {
+        if (is_array($raw)) {
             return $this->buildStaticMethod(new ReflectionMethod($raw[0], $raw[1]), $depth);
         }
 
