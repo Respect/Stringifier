@@ -12,20 +12,15 @@ namespace Respect\Stringifier\Quoters;
 
 use Respect\Stringifier\Quoter;
 
-use function mb_strlen;
-use function mb_substr;
 use function sprintf;
-use function str_contains;
-use function strpos;
 
 final class CodeQuoter implements Quoter
 {
-    private const string OBJECT_PLACEHOLDER = ' ... }';
-    private const string ARRAY_PLACEHOLDER = ' ... ]';
-    private const string GENERIC_PLACEHOLDER = ' ...';
+    private readonly LimiterQuoter $limiter;
 
-    public function __construct(private readonly int $maximumLength)
+    public function __construct(int $maximumLength)
     {
+        $this->limiter = new LimiterQuoter($maximumLength - 2);
     }
 
     public function quote(string $string, int $depth): string
@@ -34,30 +29,6 @@ final class CodeQuoter implements Quoter
             return $string;
         }
 
-        $limitWithQuotes = $this->maximumLength - 2;
-        if (mb_strlen($string) <= $limitWithQuotes) {
-            return $this->code($string);
-        }
-
-        $filtered = mb_substr($string, 0, $limitWithQuotes);
-        if (strpos($filtered, '[') === 0) {
-            return $this->placeholder($filtered, self::ARRAY_PLACEHOLDER);
-        }
-
-        if (str_contains($filtered, '{')) {
-            return $this->placeholder($filtered, self::OBJECT_PLACEHOLDER);
-        }
-
-        return $this->placeholder($filtered, self::GENERIC_PLACEHOLDER);
-    }
-
-    private function code(string $string): string
-    {
-        return sprintf('`%s`', $string);
-    }
-
-    private function placeholder(string $string, string $placeholder): string
-    {
-        return $this->code(mb_substr($string, 0, -1 * mb_strlen($placeholder)) . $placeholder);
+        return sprintf('`%s`', $this->limiter->quote($string, $depth));
     }
 }
